@@ -4,7 +4,7 @@ import SvgIcon from '@mui/material/SvgIcon';
 
 export default function DefaultUserIcon(props) {
     return (
-        <svg viewBox="0 0 212 212" height="40" width="40" preserveAspectRatio="xMidYMid meet" version="1.1" x="0px" y="0px" enable-background="new 0 0 212 212">
+        <svg viewBox="0 0 212 212" height={props.height} width={props.height} preserveAspectRatio="xMidYMid meet" version="1.1" x="0px" y="0px" enable-background="new 0 0 212 212">
             <title>default-user</title>
             <path fill="#6a7175" d="M106.251,0.5C164.653,0.5,212,47.846,212,106.25S164.653,212,106.25,212C47.846,212,0.5,164.654,0.5,106.25 S47.846,0.5,106.251,0.5z"></path>
             <g>
@@ -66,3 +66,55 @@ export function MenuDotIcon(props) {
     );
 };
 
+
+export function CameraIcon(props) {
+    return (
+        <SvgIcon {...props}>
+            <title>camera</title>
+            <path fill="#e9edef" d="M21.317,4.381H10.971L9.078,2.45C8.832,2.199,8.342,1.993,7.989,1.993H4.905 c-0.352,0-0.837,0.211-1.078,0.468L1.201,5.272C0.96,5.529,0.763,6.028,0.763,6.38v1.878c0,0.003-0.002,0.007-0.002,0.01v11.189 c0,1.061,0.86,1.921,1.921,1.921h18.634c1.061,0,1.921-0.86,1.921-1.921V6.302C23.238,5.241,22.378,4.381,21.317,4.381z  M12.076,18.51c-3.08,0-5.577-2.497-5.577-5.577s2.497-5.577,5.577-5.577s5.577,2.497,5.577,5.577 C17.654,16.013,15.157,18.51,12.076,18.51z M12.076,9.004c-2.17,0-3.929,1.759-3.929,3.929s1.759,3.929,3.929,3.929 s3.929-1.759,3.929-3.929C16.004,10.763,14.245,9.004,12.076,9.004z"></path>
+        </SvgIcon>
+    );
+};
+
+export function PencilIcon(props) {
+    return (
+        <svg viewBox="0 0 24 24" height="24" width="24" preserveAspectRatio="xMidYMid meet" class="" version="1.1" x="0px" y="0px" enable-background="new 0 0 24 24"><title>pencil</title><path fill="currentColor" d="M3.95,16.7v3.4h3.4l9.8-9.9l-3.4-3.4L3.95,16.7z M19.75,7.6c0.4-0.4,0.4-0.9,0-1.3 l-2.1-2.1c-0.4-0.4-0.9-0.4-1.3,0l-1.6,1.6l3.4,3.4L19.75,7.6z"></path></svg>
+    );
+};
+
+
+export function VideoCallIcon(props) {
+    return (
+        <SvgIcon {...props}>
+            <title>video-call</title>
+            <path
+                d="M3.27096 7.31042C3 7.82381 3 8.49587 3 9.84V14.16C3 15.5041 3 16.1762 3.27096 16.6896C3.5093 17.1412 3.88961 17.5083 4.35738 17.7384C4.88916 18 5.58531 18 6.9776 18H13.1097C14.502 18 15.1982 18 15.7299 17.7384C16.1977 17.5083 16.578 17.1412 16.8164 16.6896C17.0873 16.1762 17.0873 15.5041 17.0873 14.16V9.84C17.0873 8.49587 17.0873 7.82381 16.8164 7.31042C16.578 6.85883 16.1977 6.49168 15.7299 6.26158C15.1982 6 14.502 6 13.1097 6H6.9776C5.58531 6 4.88916 6 4.35738 6.26158C3.88961 6.49168 3.5093 6.85883 3.27096 7.31042Z"
+                fill="currentColor"
+            />
+            <path
+                d="M18.7308 9.60844C18.5601 9.75994 18.4629 9.97355 18.4629 10.1974V13.8026C18.4629 14.0264 18.5601 14.2401 18.7308 14.3916L20.9567 16.3669C21.4879 16.8384 22.3462 16.4746 22.3462 15.778V8.22203C22.3462 7.52542 21.4879 7.16163 20.9567 7.63306L18.7308 9.60844Z"
+                fill="currentColor"
+            />
+        </SvgIcon>
+    );
+};
+
+// export function DownArrowIcon(props) {
+//     return (
+//         <SvgIcon {...props}>
+//             <title>down</title>
+//             <path
+//                 fill="currentColor"
+//                 d="M3.8,6.7l5.7,5.7l5.7-5.7l1.6,1.6l-7.3,7.2L2.2,8.3L3.8,6.7z"
+//             />
+//         </SvgIcon>
+//     );
+// };
+
+export function DownArrowIcon(props) {
+    return (
+        <svg viewBox="0 0 19 20" height={props.height} width={props.width} preserveAspectRatio="xMidYMid meet" class="" version="1.1" x="0px" y="0px">
+            <title>down</title>
+            <path fill={props.colour} d="M3.8,6.7l5.7,5.7l5.7-5.7l1.6,1.6l-7.3,7.2L2.2,8.3L3.8,6.7z"></path></svg>
+    );
+};

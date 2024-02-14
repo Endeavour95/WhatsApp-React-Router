@@ -2,18 +2,20 @@ import { Grid, Box, Stack, Button, Input, TextField, IconButton, CircularProgres
 import SvgIcon from '@mui/material/SvgIcon';
 import SearchIcon, { BackIcon, XAltIcon } from "../Icons/SearchBarIcons";
 import { useState, useEffect, useRef } from "react";
-import debounce from 'lodash/debounce';
-
 
 export default function LeftPannelSearchBar(props) {
     const inputRef = useRef(null);
 
+    useEffect(() => {
+        if (props.allButtons.backIcon) {
+            // Focus the input field when backIcon is true
+            inputRef.current.focus();
+        }
+    }, [props.allButtons.backIcon]);
 
     const [xaltIcon, setXaltIcon] = useState(false)
 
     const [circularProgress, setCircularProgress] = useState(false)
-
-
 
     function handleCircularProgress() {
         setXaltIcon(false)
@@ -22,25 +24,8 @@ export default function LeftPannelSearchBar(props) {
         setTimeout(() => {
             setCircularProgress(false)
             setXaltIcon(true)
-        }, 500)
+        }, 1000)
     }
-
-
-    // const [loading, setLoading] = useState(false);
-
-    // const debouncedSearch = debounce(handleInputChange, 500);
-
-    // function handleInputChange(value) {
-    //     setLoading(true);
-
-    //     setTimeout(() => {
-    //         setLoading(false);
-    //     }, 1000);
-    // }
-
-    // useEffect(() => {
-    //     return () => debouncedSearch.cancel();
-    // }, [debouncedSearch]);
 
     return (
         <>
@@ -51,8 +36,8 @@ export default function LeftPannelSearchBar(props) {
                     position: "relative",
                     boxSizing: "border-box",
                     alignItems: "center",
-                    // zIndex:"100",
-                    height: "49px",
+                    // height: "49px",
+                    padding:"7px 12px 7px",
                     width: "100%",
                 }}
             >
@@ -75,11 +60,13 @@ export default function LeftPannelSearchBar(props) {
                                 id="searchIcon"
                                 onClick={(e) => {
                                     props.allButtonsSetter(e.currentTarget.id, false)
-                                    inputRef.current.focus();
+                                    props.allButtonsSetter("backIcon", true)
+                                    // console.log("inputfrf", inputRef)
+                                    // inputRef.current.focus();
                                 }}
                             >
                                 <SearchIcon
-                                    colour="#8696a0"
+                                    colour="#8696a0" height={24} width={24}
                                 />
                             </IconButton>
                         ) : (
@@ -88,9 +75,12 @@ export default function LeftPannelSearchBar(props) {
                                     paddingLeft: "12px",
                                     paddingRight: "17px",
                                 }}
-                                // id="backIcon"
+                                id="backIcon"
                                 onClick={(e) => {
                                     props.allButtonsSetter("searchIcon", true)
+                                    props.allButtonsSetter(e.currentTarget.id, false)
+                                    setXaltIcon(false)
+                                    props.setSearchText("")
                                 }}
                             >
                                 <BackIcon
@@ -101,16 +91,15 @@ export default function LeftPannelSearchBar(props) {
                     }
                 </Stack>
                 <Input
+                    id="messageField"
                     ref={inputRef}
+
                     onClick={() => {
                         props.allButtonsSetter("searchIcon", false)
                     }}
                     onChange={(e) => {
                         props.setSearchText(e.currentTarget.value)
-
-
                         handleCircularProgress()
-                        // debouncedSearch(e.currentTarget.value)
                     }}
                     placeholder="Search or start a new chat"
                     value={props.searchText}
@@ -119,11 +108,14 @@ export default function LeftPannelSearchBar(props) {
                     sx={{
                         bgcolor: "#202C33",
                         height: "35px",
-
+                        font: "inherit",
                         padding: "9px 0px 9px 12px",
                         color: "#d1d7db",
                         textIndent: "0px",
                         textDecoration: "none",
+                        lineHeight: "inherit",
+                        fontSize: "15px",
+                        // ":focus": {{props.allButtons.backIcon}}
                     }}
                 />
 
@@ -220,7 +212,7 @@ export default function LeftPannelSearchBar(props) {
                         )
                     } */}
                     {
-                        xaltIcon === false && circularProgress === false ? (
+                        (xaltIcon === false && circularProgress === false) || props.searchText === "" ? (
                             <IconButton
                                 sx={{
                                     paddingLeft: "0px",
