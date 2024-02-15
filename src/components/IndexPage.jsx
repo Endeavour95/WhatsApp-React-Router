@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import DefaultUserIcon from "../Icons/LeftTopNavigationIcons";
 import DefaultRightPannel from "./DefaultRightPannel";
 
-export default function IndexPage() {
+export default function MainPage() {
     const [allButtons, setAllButtons] = useState(
         {
             "personalProfileIcon": false,
@@ -128,93 +128,31 @@ export default function IndexPage() {
         }
     ])
 
-    // const [sentMessages, setSentMessages] = useState([
-    //     {
-    //         "messageId": '',
-    //         "messageText": '',
-    //         "messageTime": "",
-    //         "messageDate": '',
-    //         "receiverMobileNo": '',
-    //         "deliverdStatus": false,
-    //         "readStatus": false,
-    //     }
-    // ])
-
-    // const [receivedMessages, setReceivedMessages] = useState([
-    //     {
-    //         "messageId": '',
-    //         "messageText": '',
-    //         "messageTime": '',
-    //         "messageDate": '',
-    //         "senderMobileNo": '',
-    //     }
-    // ])
-
-    const [message, setMessage] = useState({})
-
-    // const [message, setMessage] = useState({
-    //     "messageId": Number(chats[chats.length - 1].messageId) + 1,
-    //     "messageText": '',
-    //     "messageTime": '',
-    //     "messageDate": '',
-    //     "receiverMobileNo": '',
-    //     "deliverdStatus": false,
-    //     "readStatus": false,
-    // })
-
-
-    // useEffect(() => {
-    //     setChats([...chats, message])
-    //     props.setUsers((oldUsers) => oldUsers.map((user, index)=>{
-    //         user.userMobileNo === message.receiverMobileNo ? {...users, users[index].userMessages.push(message.messageId)} : user
-    //     }))
-
-    //     // props.setUsers((oldUsers) => oldUsers[oldUsers.length - 1].me)
-
-    //     // props.users.findIndex(user => user.userMobileNo === props.selectedUser.userMobileNo)
-    // }, [message])
-
-
-    // function updateUsers() {
-    //     setChats([...chats, message]);
-
-    //     setUsers((oldUsers) =>
-    //         oldUsers.map((user) =>
-    //             user.userMobileNo === message.receiverMobileNo
-    //                 ? {
-    //                     ...user,
-    //                     userMessages: user.userMessages.includes(message.messageId)
-    //                         ? user.userMessages
-    //                         : [...user.userMessages, message.messageId],
-    //                 }
-    //                 : user
-    //         )
-    //     );
-
-    //     setMessage({})
-    // }
-
     function updateUsers(obj) {
-
-
-        console.log("sdkjfkjdsf", obj)
         setChats([...chats, obj]);
-        console.log("chats", chats)
+        makeMessageReadAndDelivered()
+    }
 
-        // setUsers((oldUsers) =>
-        //     oldUsers.map((user) =>
-        //         user.userMobileNo === obj.receiverMobileNo
-        //             ? {
-        //                 ...user,
-        //                 userMessages: user.userMessages.includes(message.messageId)
-        //                     ? user.userMessages
-        //                     : [...user.userMessages, obj.messageId],
-        //             }
-        //             : user
-        //     )
-        // );
+    function makeMessageReadAndDelivered() {
+        const lastChatIndex = chats.length - 1;
 
-        // setMessage({})
+        if (lastChatIndex >= 0 && chats[lastChatIndex].deliverdStatus) {
+            setTimeout(() => {
+                setChats((prevChats) =>
+                    prevChats.map((chat, index) =>
+                        index === lastChatIndex ? { ...chat, deliverdStatus: true } : chat
+                    )
+                );
+            }, 5000);
+
+            setTimeout(() => {
+                setChats((prevChats) =>
+                    prevChats.map((chat, index) =>
+                        index === lastChatIndex ? { ...chat, readStatus: true } : chat
+                    )
+                );
+            }, 10000);
+        }
     }
 
     // useEffect(() => {
@@ -267,23 +205,6 @@ export default function IndexPage() {
 
 
 
-    function messageSetter(property, value) {
-        setMessage((oldMessage) => ({
-            ...oldMessage,
-            [property]: value,
-        }))
-    }
-
-    // const now = new Date();
-
-    // const [hours, minutes, seconds] = [now.getHours().toString().padStart(2, '0'), now.getMinutes().toString().padStart(2, '0'), now.getSeconds().toString().padStart(2, '0')];
-    // const time = `${hours}:${minutes}:${seconds}`
-
-    // const date = now.toLocaleDateString([], { year: 'numeric', month: 'numeric', day: 'numeric' });
-
-    // console.log(`Current time: ${time}`);
-    // console.log(`Current date: ${date}`);
-
     const [users, setUsers] = useState([
         {
             "userName": "Rameshwar Varpe",
@@ -294,7 +215,6 @@ export default function IndexPage() {
             "userLastSeen": "15:23",
             "userLastMessage": "",
             "userUnreadMessages": "8",
-            // "userMessages": ["1", "3", "4", "6", "7", "8", "9", "10"]
         },
         {
             "userName": "Harshal Dhokane",
@@ -305,8 +225,6 @@ export default function IndexPage() {
             "userLastSeen": "14:23",
             "userLastMessage": "",
             "userUnreadMessages": "9",
-            // "userMessages": ["2", "5"]
-
         },
         {
             "userName": "Sanket Gupta",
@@ -317,8 +235,6 @@ export default function IndexPage() {
             "userLastSeen": "03:00",
             "userLastMessage": "",
             "userUnreadMessages": "",
-            // "userMessages": []
-
         },
         {
             "userName": "Abhishek Chopade",
@@ -329,7 +245,6 @@ export default function IndexPage() {
             "userLastSeen": "05:00",
             "userLastMessage": "",
             "userUnreadMessages": "",
-            // "userMessages": []
         },
         {
             "userName": "Prajwal Ingole",
@@ -340,7 +255,6 @@ export default function IndexPage() {
             "userLastSeen": "24:00",
             "userLastMessage": "",
             "userUnreadMessages": "",
-            // "userMessages": []
         },
         {
             "userName": "Nikhilesh Mane",
@@ -351,7 +265,6 @@ export default function IndexPage() {
             "userLastSeen": "23:00",
             "userLastMessage": "",
             "userUnreadMessages": "",
-            // "userMessages": []
         },
         {
             "userName": "Aditya",
@@ -362,7 +275,6 @@ export default function IndexPage() {
             "userLastSeen": "01:27",
             "userLastMessage": "",
             "userUnreadMessages": "9",
-            // "userMessages": []
         },
         {
             "userName": "Om Chokhat",
@@ -373,7 +285,6 @@ export default function IndexPage() {
             "userLastSeen": "",
             "userLastMessage": "",
             "userUnreadMessages": "5",
-            // "userMessages": []
         },
         {
             "userName": "Mangesh Ganjare",
@@ -384,7 +295,6 @@ export default function IndexPage() {
             "userLastSeen": "",
             "userLastMessage": "",
             "userUnreadMessages": "8",
-            // "userMessages": []
         },
         {
             "userName": "Prathamesh Gode",
@@ -395,32 +305,8 @@ export default function IndexPage() {
             "userLastSeen": "",
             "userLastMessage": "",
             "userUnreadMessages": "2",
-            // "userMessages": []
         },
     ])
-
-    // const [selectedUser, setSelectedUser] = useState({
-    //     "userName": "Aditya",
-    //     "profilePicture": "https://media-bom2-2.cdn.whatsapp.net/v/t61.24694-24/383670737_350499304234701_3256428619540089720_n.jpg?ccb=11-4&oh=01_AdRZlCAB99R3jLn-V1nFg2_aos87f9K-iAFN8H0wIS2b_A&oe=65D6C99F&_nc_sid=e6ed6c&_nc_cat=108",
-    //     "countryCode": "+91",
-    //     "userMobileNo": "8668559528",
-    //     "userAbout": "पंख त्यांचेच मजबूत असतात जे एकटे उडतात, आणि प्रवाहाविरुद्ध झेप घेतात.",
-    //     "userLastSeen": "",
-    //     "userLastMessage": "",
-    //     "userUnreadMessages": "",
-    //     "userMessages": [
-    //         {
-    //             "messageId": '',
-    //             "messageText": '',
-    //             "messageTime": '',
-    //             "messageDate": '',
-    //             "senderId": '',
-    //             "receiverId": '',
-    //             "readStatus": '',
-    //             "deliverdStatus": ''
-    //         }
-    //     ]
-    // })
 
     const [selectedUser, setSelectedUser] = useState({})
 
@@ -432,28 +318,29 @@ export default function IndexPage() {
     }
 
 
-    // useEffect(() => {
-    //     console.log("maina fkjsjdfsdhf", message)
-    // }, [message])
+    function getLastMessageText(userMobileNo) {
+        if (chats.length > 0) {
+            const filteredChats = chats.filter(chat => chat.userMobileNo === userMobileNo);
 
-    // function setNewMessage(obj) {
-    //     console.log("dfdsfdsf", obj)
-    //     setMessage(obj)
-    //     console.log("setnewmesafd", message)
-    // }
+            if (filteredChats.length > 0) {
+                const sortedChats = filteredChats.sort((a, b) => b.messageId - a.messageId);
 
+                const lastMessageText = sortedChats[0].messageText;
 
+                return lastMessageText;
+            }
+        }
+
+        return null;
+    }
+
+    console.log("chats from index",chats)
     return (
         <>
             <Grid
                 container
                 direction="row"
-                // justifyContent="center"
-                // alignItems="stretch"
                 sx={{
-                    // height: "100vh",
-                    // width: "100vw",
-                    // bgcolor: "#0c1317",
                     bgcolor: "#111b21",
                     display: "flex",
                     // padding: "1.25%",
@@ -461,6 +348,7 @@ export default function IndexPage() {
                 }}
             >
                 <Left
+                    chats={chats}
                     allButtons={allButtons}
                     setAllButtons={setAllButtons}
                     allButtonsSetter={allButtonsSetter}
@@ -471,7 +359,7 @@ export default function IndexPage() {
                     users={users}
                     selectedUser={selectedUser}
                     setSelectedUser={setSelectedUser}
-                // selectedUserSetter={selectedUserSetter}
+                    getLastMessageText={getLastMessageText}
                 />
                 <Divider
                     orientation="vertical"
@@ -480,12 +368,6 @@ export default function IndexPage() {
                         bgcolor: "#313d45",
                     }}
                 />
-
-                {/* <Right
-                    message={message}
-                    setMessage={setMessage}
-                    messageSetter={messageSetter}
-                /> */}
                 {
                     Object.values(selectedUser).length > 0 ?
                         <Right
@@ -493,9 +375,6 @@ export default function IndexPage() {
                             setUsers={setUsers}
                             chats={chats}
                             setChats={setChats}
-                            message={message}
-                            // setMessage={setNewMessage}
-                            messageSetter={messageSetter}
                             selectedUser={selectedUser}
                             selectedUserSetter={selectedUserSetter}
                             updateUsers={updateUsers}

@@ -9,8 +9,10 @@ import { useState } from "react";
 import LeftUsersList from "./LeftUsersList";
 
 
-
+// const  Left = (props)=>{
 export default function Left(props) {
+    // const {chats} = props;
+    // console.log("chats from left",chats);
     const [belowSearchBarButtons, setBelowSearchBarButtons] = useState({
         "buttonAll": true,
         "buttonUnread": false,
@@ -26,15 +28,16 @@ export default function Left(props) {
         }));
     }
 
+    // console.log("left", props.chats)
+
     return (
         <>
             <Grid
                 item
                 xs={12} sm={6} md={4} lg={3.6}
                 sx={{
-                    display:{xs:props.selectedUser.userMobileNo ? "none" : "block", sm: "block"}
+                    display: { xs: props.selectedUser.userMobileNo ? "none" : "block", sm: "block" }
                 }}
-            // sx={{ width: "30%" }}
             >
                 <Grid
                     container
@@ -44,6 +47,7 @@ export default function Left(props) {
                     sx={{
                         bgcolor: "#111b21",
                         height: "100%",
+                        // width:"100%",
                     }}
                 >
                     {
@@ -68,14 +72,12 @@ export default function Left(props) {
                         ) : (
                             <>
                                 <Box
-                                    height="23.5vh"
+                                    height="23.8vh"
                                 >
                                     <LeftTopNavigation
                                         allButtons={props.allButtons}
                                         setAllButtons={props.setAllButtons}
                                         allButtonsSetter={props.allButtonsSetter}
-                                    // profileButton={props.profileButton}
-                                    // setProfileButton={props.setProfileButton}
                                     />
                                     <LeftPannelSearchBar
                                         allButtons={props.allButtons}
@@ -92,16 +94,13 @@ export default function Left(props) {
 
                                 </Box>
                                 <LeftUsersList
+                                    chats={props.chats}
                                     users={props.users}
                                     searchText={props.searchText}
                                     selectedUser={props.selectedUser}
                                     belowSearchBarButtons={belowSearchBarButtons}
                                     setSelectedUser={props.setSelectedUser}
-                                // selectedUserSetter={props.selectedUserSetter}
-                                // sx={{
-                                //     overflowY: 'auto', // Make the list scrollable vertically
-                                //     flexGrow: 1, // Allow the list to grow and take remaining space
-                                // }}
+                                    getLastMessageText={props.getLastMessageText}
                                 />
                             </>
                         )
@@ -111,3 +110,5 @@ export default function Left(props) {
         </>
     )
 }
+
+// export default Left

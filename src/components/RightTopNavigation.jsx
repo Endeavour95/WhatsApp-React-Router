@@ -142,134 +142,119 @@ export default function RightTopNavigation(props) {
             <VideoCallModal isOpen={isModalOpen} onClose={handleCloseModal} />
             <Grid item
                 sx={{
-                    position: "relative",
-                    // height: "59px",
-                    height:"9.6vh",
-                    // width: "100%",
-                    top: 0,
-                    bottom: 'auto'
+                    height: "9.6vh",
+                    '&:hover': { cursor: "pointer" }
                 }}
             >
-                <AppBar
+                <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
                     sx={{
-                        position: "static",
-                        height: "100%",
-                        // width: "100%",
+                        padding: "10px 16px",
+                        // height: "inherit",
+                        boxSizing: "border-box",
+                        bgcolor: "#202c33"
                     }}
                 >
                     <Stack
                         direction="row"
-                        justifyContent="space-between"
+                        justifyContent="flex-start"
                         alignItems="center"
-                        sx={{
-                            padding: "10px 16px",
-                            height: "inherit",
-                            // width: "inherit",
-                            boxSizing: "border-box",
-                            bgcolor: "#202c33"
-                        }}
                     >
-
-
-                        <Stack
-                            direction="row"
-                            justifyContent="flex-start"
-                            alignItems="center"
+                        <Box
+                            id="personalProfileIcon"
+                            onClick={(e) => { }}
+                            sx={{
+                                paddingRight: "15px",
+                                '&:hover': { cursor: "pointer" }
+                            }}
                         >
-                            <Box
-                                id="personalProfileIcon"
-                                onClick={(e) => { }}
+                            {
+                                props.selectedUser.profilePicture ? (
+                                    <Avatar sx={{ height: "40px", width: "40px" }} alt={props.selectedUser.userName} src={props.selectedUser.profilePicture} />
+                                ) : (
+                                    <DefaultUserIcon height={40} width={40} />
+                                )
+                            }
+                        </Box>
+                        <Stack
+                            direction={"column"}
+                            justifyContent="center"
+                            alignItems="flex-start"
+                        >
+                            <Typography
                                 sx={{
-                                    paddingRight: "15px",
+                                    color: "#ede9ef",
+                                    font: "inherit",
+                                    fontSize: "16px",
+                                    fontWeight: "600",
                                     '&:hover': { cursor: "pointer" }
                                 }}
                             >
-                                {
-                                    props.selectedUser.profilePicture ? (
-                                        <Avatar sx={{ height: "40px", width: "40px" }} alt={props.selectedUser.userName} src={props.selectedUser.profilePicture} />
-                                    ) : (
-                                        <DefaultUserIcon height={40} width={40} />
-                                    )
-                                }
-                            </Box>
-                            <Stack
-                                direction={"column"}
-                                justifyContent="center"
-                                alignItems="flex-start"
-                            >
-                                <Typography
-                                    sx={{
-                                        color: "#ede9ef",
-                                        font: "inherit",
-                                        fontSize: "16px",
-                                        fontWeight: "600",
-                                        '&:hover': { cursor: "pointer" }
-                                    }}
-                                >
-                                    {props.selectedUser.userName}
-                                </Typography>
+                                {props.selectedUser.userName}
+                            </Typography>
 
-                                {
-                                    props.selectedUser.userLastSeen ?
-                                        <Typography
-                                            sx={{
-                                                color: '#8696A0',
-                                                font: 'inherit',
-                                                fontSize: '13px',
-                                            }}
-                                        >
-                                            last seen today at {props.selectedUser.userLastSeen}
-                                        </Typography> :
-                                        <Typography
-                                            sx={{
-                                                color: '#8696A0',
-                                                font: 'inherit',
-                                                fontSize: '13px',
-                                            }}
-                                        >
-                                            Click here for contact info
-                                        </Typography>
-                                }
-                            </Stack>
-                        </Stack>
-
-                        <Stack
-                            id="icons"
-                            direction="row"
-                            justifyContent="flex-start"
-                            alignItems="center"
-                        >
-                            <IconButton
-                                onClick={() => {
-                                    handleOpenModal()
-                                }}
-                                sx={{
-                                    color: "#4c5c66",
-                                }}
-                            >
-                                <VideoCallIcon sx={{ marginRight: "6px" }} />
-                                <DownArrowIcon height={13} width={13} colour={"#4c5c66"} />
-                            </IconButton>
-                            <IconButton
-                                id="searchIcon"
-                                onClick={(e) => {
-
-                                }}
-                            >
-                                <SearchIcon
-                                    colour="#aebac1" height={30} width={30}
-                                />
-                            </IconButton>
-                            <IconButton
-                                sx={{
-                                    marginTop: "2px"
-                                }}
-                            >
-                                <MenuDotIcon />
-                            </IconButton>
+                            {
+                                props.selectedUser.userLastSeen ?
+                                    <Typography
+                                        sx={{
+                                            color: '#8696A0',
+                                            font: 'inherit',
+                                            fontSize: '13px',
+                                        }}
+                                    >
+                                        last seen today at {props.selectedUser.userLastSeen}
+                                    </Typography> :
+                                    <Typography
+                                        sx={{
+                                            color: '#8696A0',
+                                            font: 'inherit',
+                                            fontSize: '13px',
+                                        }}
+                                    >
+                                        Click here for contact info
+                                    </Typography>
+                            }
                         </Stack>
                     </Stack>
-                </AppBar>
+
+                    <Stack
+                        id="icons"
+                        direction="row"
+                        justifyContent="flex-start"
+                        alignItems="center"
+                    >
+                        <IconButton
+                            onClick={() => {
+                                handleOpenModal()
+                            }}
+                            sx={{
+                                color: "#4c5c66",
+                            }}
+                        >
+                            <VideoCallIcon sx={{ marginRight: "6px" }} />
+                            <DownArrowIcon height={13} width={13} colour={"#4c5c66"} />
+                        </IconButton>
+                        <IconButton
+                            id="searchIcon"
+                            onClick={(e) => {
+
+                            }}
+                        >
+                            <SearchIcon
+                                colour="#aebac1" height={30} width={30}
+                            />
+                        </IconButton>
+                        <IconButton
+                            sx={{
+                                marginTop: "2px"
+                            }}
+                        >
+                            <MenuDotIcon />
+                        </IconButton>
+                    </Stack>
+                </Stack>
             </Grid>
         </>
     )

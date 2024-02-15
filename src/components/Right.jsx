@@ -37,21 +37,12 @@ export default function Right(props) {
                 <RightMiddleChatSection
                     chats={props.chats}
                     selectedUser={props.selectedUser}
-                // setChats={setChats}
                 />
                 <RightBottomBar
                     users={props.users}
-                    setUsers={props.setUsers}
                     chats={props.chats}
-                    setChats={props.setChats}
-                    message={props.message}
-                    setMessage={props.setMessage}
-                    messageSetter={props.messageSetter}
                     selectedUser={props.selectedUser}
-                    setSelectedUser={props.setSelectedUser}
-                    selectedUserSetter={props.selectedUserSetter}
                     updateUsers={props.updateUsers}
-
                 />
             </Grid>
         </Grid>

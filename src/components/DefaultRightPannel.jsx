@@ -7,7 +7,6 @@ export default function DefaultRightPannel() {
     const openWhatsAppDesktop = () => {
         const microsoftStoreLink = 'https://www.microsoft.com/store/productId/9NKSQGP7F2NH?ocid=pdpshare';
 
-        // Open the Microsoft Store link in the default browser
         window.open(microsoftStoreLink, '_blank');
     };
 
@@ -93,7 +92,6 @@ export default function DefaultRightPannel() {
                                 textAlign: "center",
                                 padding: "10px 24px",
                                 borderRadius: "24px",
-                                // border: "1px solid transparent",
                                 '&:hover': { bgcolor: "#06cf9c" },
                                 fontFamily: "Segoe UI,Helvetica Neue,Helvetica,Lucida Grande,Arial,Ubuntu,Cantarell,Fira Sans,sans-serif",
                             }}
