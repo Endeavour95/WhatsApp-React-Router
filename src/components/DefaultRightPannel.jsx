@@ -22,6 +22,8 @@ export default function DefaultRightPannel() {
                 sx={{
                     bgcolor: "#222e35",
                     "&:hover": { cursor: "default" },
+                    // height:"inherit",
+                    // width:"inherit"
                 }}
             >
 

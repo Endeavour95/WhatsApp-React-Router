@@ -1,8 +1,6 @@
 import { Divider, Grid, Box, Stack } from "@mui/material";
 import LeftTopNavigation from "./LeftTopNavigation";
-import LeftPannel from "./LeftPannel";
 import LeftPannelSearchBar from "./LeftPannelSearchBar";
-import PersonalInfoDrawer from "./PersonalInfoDrawer";
 import PersonalProfileInfoDrawer from "./PersonalProfileInfoDrawer";
 import LeftPannelBelowSearchBarButtons from "./LeftPannelBelowSearchBarButtons";
 import { useState } from "react";
@@ -72,9 +70,9 @@ export default function Left(props) {
                             >
 
 
-                                {/* <Box
+                                <Box
                                 height="23.8vh"
-                            > */}
+                            >
                                 <Grid item
                                     sx={{
                                         // position: "relative",
@@ -101,9 +99,9 @@ export default function Left(props) {
                                         position: "relative",
                                         boxSizing: "border-box",
                                         alignItems: "center",
-                                        // height: "49px",
                                         padding: "7px 12px 7px",
                                         width: "100%",
+                                        bgcolor:"#111b21"
                                     }}
                                 >
                                     <LeftPannelSearchBar
@@ -121,7 +119,7 @@ export default function Left(props) {
                                     belowSearchBarButtonsSetter={belowSearchBarButtonsSetter}
                                 />
 
-                                {/* </Box> */}
+                                </Box>
                                 <LeftUsersList
                                     chats={props.chats}
                                     users={props.users}
