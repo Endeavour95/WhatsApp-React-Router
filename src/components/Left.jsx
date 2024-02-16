@@ -1,4 +1,4 @@
-import { Divider, Grid, Box } from "@mui/material";
+import { Divider, Grid, Box, Stack } from "@mui/material";
 import LeftTopNavigation from "./LeftTopNavigation";
 import LeftPannel from "./LeftPannel";
 import LeftPannelSearchBar from "./LeftPannelSearchBar";
@@ -8,11 +8,7 @@ import LeftPannelBelowSearchBarButtons from "./LeftPannelBelowSearchBarButtons";
 import { useState } from "react";
 import LeftUsersList from "./LeftUsersList";
 
-
-// const  Left = (props)=>{
 export default function Left(props) {
-    // const {chats} = props;
-    // console.log("chats from left",chats);
     const [belowSearchBarButtons, setBelowSearchBarButtons] = useState({
         "buttonAll": true,
         "buttonUnread": false,
@@ -28,18 +24,14 @@ export default function Left(props) {
         }));
     }
 
-    // console.log("left", props.chats)
-
     return (
         <>
-            <Grid
-                item
-                xs={12} sm={6} md={4} lg={3.6}
-                sx={{
-                    display: { xs: props.selectedUser.userMobileNo ? "none" : "block", sm: "block" }
-                }}
+            <Stack
+                direction={"column"}
+                justifyContent={"flex-start"}
+                alignItems={"stretch"}
             >
-                <Grid
+                {/* <Grid
                     container
                     direction="column"
                     justifyContent="flex-start"
@@ -49,11 +41,11 @@ export default function Left(props) {
                         height: "100%",
                         // width:"100%",
                     }}
-                >
-                    {
-                        props.allButtons.personalProfileIcon ? (
-                            <>
-                                {/* <PersonalInfoDrawer
+                > */}
+                {
+                    props.allButtons.personalProfileIcon ? (
+                        <>
+                            {/* <PersonalInfoDrawer
                                      allButtons={props.allButtons}
                                      setAllButtons={props.setAllButtons}
                                      allButtonsSetter={props.allButtonsSetter}
@@ -61,24 +53,59 @@ export default function Left(props) {
                                      personalInfoSetter={props.personalInfoSetter}
                                 /> */}
 
-                                <PersonalProfileInfoDrawer
-                                    allButtons={props.allButtons}
-                                    setAllButtons={props.setAllButtons}
-                                    allButtonsSetter={props.allButtonsSetter}
-                                    personalInfo={props.personalInfo}
-                                    personalInfoSetter={props.personalInfoSetter}
-                                />
-                            </>
-                        ) : (
-                            <>
-                                <Box
-                                    height="23.8vh"
+                            <PersonalProfileInfoDrawer
+                                allButtons={props.allButtons}
+                                setAllButtons={props.setAllButtons}
+                                allButtonsSetter={props.allButtonsSetter}
+                                personalInfo={props.personalInfo}
+                                personalInfoSetter={props.personalInfoSetter}
+                            />
+                        </>
+                    ) : (
+                        <>
+                            <Stack
+                                direction="column"
+                                justifyContent="flex-start"
+                                alignItems="stretch"
+                                height={"100%"}
+                                width={"100%"}
+                            >
+
+
+                                {/* <Box
+                                height="23.8vh"
+                            > */}
+                                <Grid item
+                                    sx={{
+                                        // position: "relative",
+                                        bgcolor: "#202c33",
+                                        // height: "59px",
+                                        width: "100%",
+                                        // top: 0,
+                                        // bottom: 'auto',
+                                        padding: "10px 16px",
+                                        // boxSizing: "border-box",
+                                    }}
                                 >
                                     <LeftTopNavigation
                                         allButtons={props.allButtons}
                                         setAllButtons={props.setAllButtons}
                                         allButtonsSetter={props.allButtonsSetter}
                                     />
+                                </Grid>
+
+                                <Stack
+                                    direction="row"
+                                    sx={{
+                                        padding: "0px 12px",
+                                        position: "relative",
+                                        boxSizing: "border-box",
+                                        alignItems: "center",
+                                        // height: "49px",
+                                        padding: "7px 12px 7px",
+                                        width: "100%",
+                                    }}
+                                >
                                     <LeftPannelSearchBar
                                         allButtons={props.allButtons}
                                         setAllButtons={props.setAllButtons}
@@ -86,13 +113,15 @@ export default function Left(props) {
                                         searchText={props.searchText}
                                         setSearchText={props.setSearchText}
                                     />
-                                    <LeftPannelBelowSearchBarButtons
-                                        belowSearchBarButtons={belowSearchBarButtons}
-                                        setBelowSearchBarButtons={setBelowSearchBarButtons}
-                                        belowSearchBarButtonsSetter={belowSearchBarButtonsSetter}
-                                    />
+                                </Stack>
 
-                                </Box>
+                                <LeftPannelBelowSearchBarButtons
+                                    belowSearchBarButtons={belowSearchBarButtons}
+                                    setBelowSearchBarButtons={setBelowSearchBarButtons}
+                                    belowSearchBarButtonsSetter={belowSearchBarButtonsSetter}
+                                />
+
+                                {/* </Box> */}
                                 <LeftUsersList
                                     chats={props.chats}
                                     users={props.users}
@@ -102,11 +131,12 @@ export default function Left(props) {
                                     setSelectedUser={props.setSelectedUser}
                                     getLastMessageText={props.getLastMessageText}
                                 />
-                            </>
-                        )
-                    }
-                </Grid>
-            </Grid>
+                            </Stack>
+                        </>
+                    )
+                }
+                {/* </Grid> */}
+            </Stack>
         </>
     )
 }

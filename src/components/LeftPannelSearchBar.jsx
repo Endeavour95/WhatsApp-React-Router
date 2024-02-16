@@ -29,18 +29,6 @@ export default function LeftPannelSearchBar(props) {
 
     return (
         <>
-            <Stack
-                direction="row"
-                sx={{
-                    padding: "0px 12px",
-                    position: "relative",
-                    boxSizing: "border-box",
-                    alignItems: "center",
-                    // height: "49px",
-                    padding:"7px 12px 7px",
-                    width: "100%",
-                }}
-            >
                 <Stack
                     direction="row"
                     sx={{
@@ -295,7 +283,6 @@ export default function LeftPannelSearchBar(props) {
                         )
                     } */}
                 </Stack>
-            </Stack >
         </>
     )
 }

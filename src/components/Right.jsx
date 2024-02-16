@@ -8,16 +8,7 @@ const onClose = false
 
 export default function Right(props) {
     return (
-        <Grid
-            item
-            // xs={12} sm={6} md={8} lg={9}
-            sx={{
-                // width:"70%",
-                flex: "1",
-                // boxSizing: "border-box"
-                display:{xs: props.selectedUser.userMobileNo ?'block': "none",sm:'block'}
-            }}
-        >
+        <>
 
             <Grid
                 container
@@ -41,10 +32,11 @@ export default function Right(props) {
                 <RightBottomBar
                     users={props.users}
                     chats={props.chats}
+                    setChats={props.setChats}
                     selectedUser={props.selectedUser}
                     updateUsers={props.updateUsers}
                 />
             </Grid>
-        </Grid>
+        </>
     )
 }

@@ -129,8 +129,11 @@ export default function MainPage() {
     ])
 
     function updateUsers(obj) {
+        // console.log("initial chats", chats)
+
         setChats([...chats, obj]);
-        makeMessageReadAndDelivered()
+        // console.log("sdfsajdknnnzn,mnnnqrehtuyhv", chats)
+        // makeMessageReadAndDelivered()
     }
 
     function makeMessageReadAndDelivered() {
@@ -324,19 +327,19 @@ export default function MainPage() {
     //         }
     //         return user;
     //     });
-    
+
     //     setUsers(updatedUsers);
     // }, [selectedUser])
 
     useEffect(() => {
         const userToUpdate = users.find((user) => user.userMobileNo === selectedUser.userMobileNo);
-    
+
         if (userToUpdate) {
             userToUpdate.userUnreadMessages = "";
             setUsers([...users]);
         }
     }, [selectedUser]);
-    
+
     function getLastMessageText(userMobileNo) {
         if (chats.length > 0) {
             const filteredChats = chats.filter(chat => chat.userMobileNo === userMobileNo);
@@ -353,56 +356,85 @@ export default function MainPage() {
         return null;
     }
 
-    // console.log("chats from index",chats)
     return (
         <>
             <Grid
                 container
                 direction="row"
                 sx={{
-                    bgcolor: "#111b21",
-                    display: "flex",
-                    // padding: "1.25%",
-                    boxSizing: "border-box"
+                    // height:"100vh",
+                    // width:"100vw",
+                    height:"100%",
+                    width:"100%",
+                    fontFamily: "Segoe UI,Helvetica Neue,Helvetica,Lucida Grande,Arial,Ubuntu,Cantarell,Fira Sans,sans-serif",
                 }}
             >
-                <Left
-                    chats={chats}
-                    allButtons={allButtons}
-                    setAllButtons={setAllButtons}
-                    allButtonsSetter={allButtonsSetter}
-                    searchText={searchText}
-                    setSearchText={setSearchText}
-                    personalInfo={personalInfo}
-                    personalInfoSetter={personalInfoSetter}
-                    users={users}
-                    selectedUser={selectedUser}
-                    setSelectedUser={setSelectedUser}
-                    getLastMessageText={getLastMessageText}
-                />
+                <Grid
+                    item
+                    xs={12} sm={6} md={4} lg={3.6}
+                    sx={{
+                        display: { xs: selectedUser.userMobileNo ? "none" : "block", sm: "block" }
+                    }}
+                >
+                    <Left
+                        chats={chats}
+                        allButtons={allButtons}
+                        setAllButtons={setAllButtons}
+                        allButtonsSetter={allButtonsSetter}
+                        searchText={searchText}
+                        setSearchText={setSearchText}
+                        personalInfo={personalInfo}
+                        personalInfoSetter={personalInfoSetter}
+                        users={users}
+                        selectedUser={selectedUser}
+                        setSelectedUser={setSelectedUser}
+                        getLastMessageText={getLastMessageText}
+                    />
+                </Grid>
                 <Divider
                     orientation="vertical"
                     sx={{
-                        // bgcolor: "#262f34",
                         bgcolor: "#313d45",
+                        width:"0.2px"
                     }}
                 />
-                {
-                    Object.values(selectedUser).length > 0 ?
-                        <Right
-                            users={users}
-                            setUsers={setUsers}
-                            chats={chats}
-                            setChats={setChats}
-                            selectedUser={selectedUser}
-                            selectedUserSetter={selectedUserSetter}
-                            updateUsers={updateUsers}
+                <Grid
+                    item
+                    xs={12} sm={6} md={8} lg={8.39}
+                    sx={{
+                        display: { xs: selectedUser.userMobileNo ? 'block' : "none", sm: 'block' }
+                    }}
+                >
 
-                        />
-                        :
-                        <DefaultRightPannel />
-                }
+                    {
+                        Object.values(selectedUser).length > 0 ?
+                            <Right
+                                users={users}
+                                setUsers={setUsers}
+                                chats={chats}
+                                setChats={setChats}
+                                selectedUser={selectedUser}
+                                selectedUserSetter={selectedUserSetter}
+                                updateUsers={updateUsers}
+
+                            />
+                            :
+                            <DefaultRightPannel />
+                    }
+                </Grid>
             </Grid>
         </>
     )
 }
+
+{/* <Grid
+    item
+    // xs={12} sm={6} md={8} lg={9}
+    sx={{
+        flex: "1",
+        boxSizing: "border-box",
+        bgcolor: "#222e35",
+        cursor: "default",
+        display: { xs: 'none', sm: 'block' }
+    }}
+></Grid> */}

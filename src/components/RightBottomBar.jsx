@@ -1,5 +1,5 @@
 import { Grid, IconButton, Box, Input, Stack, List, ListItem, Dialog, Paper, Typography, Button } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SmileyIcon, { AttachMenuPlusIcon, SendIcon, VoiceCommandIcon } from "../Icons/RightBottomBarIcons";
 import DocumentIcon, { PhotoVideoIcon, CameraIconAdvanced, ContactIcon, PollIcon, NewStickerIcon } from "../Icons/AttachmentModalIcons";
 
@@ -206,23 +206,53 @@ export default function RightBottomBar(props) {
 
 
     function generateMessage() {
-        props.updateUsers(
-            {
-                "messageId": Number(props.chats[props.chats.length - 1].messageId) + 1,
-                "messageText": textToSend,
-                "messageTime": new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
-                "messageDate": new Date().toLocaleDateString([], {
-                    year: 'numeric',
-                    month: 'numeric',
-                    day: 'numeric',
-                }),
-                "userMobileNo": props.selectedUser.userMobileNo,
-                "deliverdStatus": false,
-                "readStatus": false,
-            }
-        )
+        props.setChats([...props.chats, {
+            "messageId": Number(props.chats[props.chats.length - 1].messageId) + 1,
+            "messageText": textToSend,
+            "messageTime": new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+            "messageDate": new Date().toLocaleDateString([], {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric',
+            }),
+            "userMobileNo": props.selectedUser.userMobileNo,
+            "deliverdStatus": false,
+            "readStatus": false,
+        }]);
+
+        // props.setChats([...props.chats, {
+        //     "messageId": Number(props.chats[props.chats.length - 1].messageId) + 1,
+        //     "messageText": textToSend,
+        //     "messageTime": new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+        //     "messageDate": new Date().toLocaleDateString([], {
+        //         year: 'numeric',
+        //         month: 'numeric',
+        //         day: 'numeric',
+        //     }),
+        //     "userMobileNo": props.selectedUser.userMobileNo,
+        // }]);
+
+
+
 
         // props.updateUsers(
+        //     {
+        //         "messageId": Number(props.chats[props.chats.length - 1].messageId) + 1,
+        //         "messageText": textToSend,
+        //         "messageTime": new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+        //         "messageDate": new Date().toLocaleDateString([], {
+        //             year: 'numeric',
+        //             month: 'numeric',
+        //             day: 'numeric',
+        //         }),
+        //         "userMobileNo": props.selectedUser.userMobileNo,
+        //         "deliverdStatus": false,
+        //         "readStatus": false,
+        //     }
+        // )
+
+        // useEffect(() => {
+        //     props.setChats([...props.chats,
         //     {
         //         "messageId": Number(props.chats[props.chats.length - 1].messageId) + 1,
         //         "messageText": textToSend + " reply Message",
@@ -233,16 +263,36 @@ export default function RightBottomBar(props) {
         //             day: 'numeric',
         //         }),
         //         "userMobileNo": props.selectedUser.userMobileNo,
-        //     }
-        // )
+        //     }])
+
+        //     setTextToSend("")
+        // }, [props.chats])
+        // // setTextToSend("")
+        // console.log("generateMessage second call ", props.chats)
+    }
+
+    function generateReplyMessage() {
+        props.setChats([...props.chats,
+        {
+            "messageId": Number(props.chats[props.chats.length - 1].messageId) + 1,
+            "messageText": textToSend + " reply Message",
+            "messageTime": new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+            "messageDate": new Date().toLocaleDateString([], {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric',
+            }),
+            "userMobileNo": props.selectedUser.userMobileNo,
+        }])
+
         setTextToSend("")
     }
 
     return (
         <>
-            <AttachMentModal 
-            isOpen={isModalOpen} 
-            onClose={handleCloseModal} 
+            <AttachMentModal
+                isOpen={isModalOpen}
+                onClose={handleCloseModal}
             />
 
             {/* <Stack
@@ -473,6 +523,11 @@ export default function RightBottomBar(props) {
                                             <SendIcon
                                                 onClick={() => {
                                                     generateMessage()
+                                                    console.log("first", props.chats)
+                                                    setTimeout(() => {
+                                                        generateReplyMessage()
+                                                        console.log("second", props.chats)
+                                                    }, 10000);
                                                 }}
                                             />
                                             :

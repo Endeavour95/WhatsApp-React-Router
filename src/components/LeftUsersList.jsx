@@ -76,7 +76,7 @@ export default function LeftUsersList(props) {
         <>
             <Paper sx={{
                 // width:"100%",
-                height: "76.2vh",
+                // height: "76.2vh",
                 overflow: 'auto',
                 borderRadius: "0px",
                 bgcolor: "#111b21",
