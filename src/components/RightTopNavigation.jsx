@@ -1,36 +1,42 @@
-import { AppBar, Grid, Toolbar, Stack, Avatar } from "@mui/material";
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
+import { Stack, Avatar, Typography, IconButton, Dialog, DialogContent, Tooltip } from "@mui/material";
 import DefaultUserIcon, { MenuDotIcon, VideoCallIcon, DownArrowIcon } from "../Icons/LeftTopNavigationIcons";
-import SearchIcon from "../Icons/SearchBarIcons";
-import { useState, useEffect } from "react";
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
+import SearchIcon, { BackIcon } from "../Icons/SearchBarIcons";
+import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Menu, MenuItem } from "@mui/material";
+import { setSelectedUserMobileNo } from "../slices/usersSlice";
 
-export default function RightTopNavigation(props) {
+export default function RightTopNavigation() {
+    const users = useSelector((state) => state.users.users)
 
-    // const [showTemporaryText, setShowTemporaryText] = useState(true);
+    const selectedUserMobileNo = useSelector((state) => state.users.selectedUserMobileNo)
 
-    // useEffect(() => {
-    //   const temporaryTextTimeout = setTimeout(() => {
-    //     setShowTemporaryText(false);
-    //   }, 1000);
+    const selectedUser = users.find((user) => user.userMobileNo === selectedUserMobileNo)
 
-    //   const resetTemporaryTextTimeout = setTimeout(() => {
-    //     setShowTemporaryText(true);
-    //   }, 6000);
-
-    //   return () => {
-    //     clearTimeout(temporaryTextTimeout);
-    //     clearTimeout(resetTemporaryTextTimeout);
-    //   };
-    // }, [props.selectedUser]); 
-
+    const dispatch = useDispatch()
 
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const menuItems = [
+        'Contact info',
+        'Select messages',
+        'Close chat',
+        'Mute notifications',
+        'Disappearing messages',
+        'Clear chat',
+        'Delete chat',
+        'Report',
+        'Block'
+    ];
+
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     const handleOpenModal = () => {
         setIsModalOpen(true);
@@ -38,7 +44,6 @@ export default function RightTopNavigation(props) {
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
-        console.log("Function Clicked");
     };
 
     function VideoCallModal({ isOpen, onClose }) {
@@ -136,10 +141,13 @@ export default function RightTopNavigation(props) {
                 direction="row"
                 justifyContent="space-between"
                 alignItems="center"
+                whiteSpace={"nowrap"}
+                // overflow={"hidden"}
                 sx={{
                     padding: "10px 16px",
                     boxSizing: "border-box",
-                    bgcolor: "#202c33"
+                    bgcolor: "#202c33",
+                    width:"100%"
                 }}
             >
                 <Stack
@@ -147,6 +155,16 @@ export default function RightTopNavigation(props) {
                     justifyContent="flex-start"
                     alignItems="center"
                 >
+                    <BackIcon
+                        id="backIcon"
+                        colour="#d9dee0"
+                        sx={{
+                            display: { xs: 'block', sm: 'none' },
+                        }}
+                        onClick={(e)=>{
+                            dispatch(setSelectedUserMobileNo(""))
+                        }}
+                    />
                     <IconButton
                         id="personalProfileIcon"
                         onClick={(e) => { }}
@@ -156,8 +174,8 @@ export default function RightTopNavigation(props) {
                         }}
                     >
                         {
-                            props.selectedUser.profilePicture ? (
-                                <Avatar sx={{ height: "40px", width: "40px" }} alt={props.selectedUser.userName} src={props.selectedUser.profilePicture} />
+                            selectedUser.profilePicture ? (
+                                <Avatar sx={{ height: "40px", width: "40px" }} alt={selectedUser.userName} src={selectedUser.profilePicture} />
                             ) : (
                                 <DefaultUserIcon height={40} width={40} />
                             )
@@ -168,6 +186,9 @@ export default function RightTopNavigation(props) {
                         justifyContent="center"
                         alignItems="flex-start"
                         paddingLeft={"15px"}
+                        // width={"40%"}
+                        // overflow={"hidden"}
+                        // textOverflow={"ellipsis"}
                     >
                         <Typography
                             sx={{
@@ -178,11 +199,11 @@ export default function RightTopNavigation(props) {
                                 '&:hover': { cursor: "pointer" }
                             }}
                         >
-                            {props.selectedUser.userName}
+                            {selectedUser.userName}
                         </Typography>
 
                         {
-                            props.selectedUser.userLastSeen ?
+                            selectedUser.userLastSeen ?
                                 <Typography
                                     sx={{
                                         color: '#8696A0',
@@ -190,7 +211,7 @@ export default function RightTopNavigation(props) {
                                         fontSize: '13px',
                                     }}
                                 >
-                                    last seen today at {props.selectedUser.userLastSeen}
+                                    last seen today at {selectedUser.userLastSeen}
                                 </Typography> :
                                 <Typography
                                     sx={{
@@ -204,7 +225,6 @@ export default function RightTopNavigation(props) {
                         }
                     </Stack>
                 </Stack>
-
                 <Stack
                     id="icons"
                     direction="row"
@@ -212,30 +232,88 @@ export default function RightTopNavigation(props) {
                     alignItems="center"
                     spacing={1}
                 >
-                    <IconButton
-                        onClick={() => {
-                            handleOpenModal()
+                    <Tooltip title="Get the app for calling">
+                        <IconButton
+                            onClick={() => {
+                                handleOpenModal()
+                            }}
+                            sx={{
+                                color: "#4c5c66",
+                                border: "1px solid #2f3b43",
+                                borderRadius: "50px",
+                                padding: "5px 10px",
+                                bgcolor: isModalOpen ? "#374248" : "none",
+                                display: {xs : "none", sm : "flex", md :"flex", lg :"flex", xl :"flex"}
+                            }}
+                        >
+                            <VideoCallIcon sx={{ marginRight: "6px" }} />
+                            <DownArrowIcon height={13} width={13} colour={"#4c5c66"} />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Search...">
+                        <IconButton
+                            sx={{
+                                padding: "0px 8px"
+                            }}
+                        >
+                            <SearchIcon colour="#aebac1" height={30} width={30} />
+                        </IconButton>
+                    </Tooltip>
+                    {/* <Tooltip title="Menu">
+                        <IconButton>
+                            <MenuDotIcon />
+                        </IconButton>
+                    </Tooltip> */}
+                    <Tooltip title="Menu">
+                        <IconButton
+                            id="menuDotIcon"
+                            onClick={(e) => {
+                                // dispatch(setLeftTopNavigationButtons({ "buttonName": e.currentTarget.id, "buttonValue": true }))
+                                handleClick(e)
+                            }}
+                            aria-controls={open ? 'account-menu' : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={open ? 'true' : undefined}
+                            sx={{
+                                borderRadius: "50%",
+                                bgcolor: anchorEl ? "#374248" : "none",
+                                "&:hover": { bgcolor: "#202c33" }
+                            }}
+                        >
+                            <MenuDotIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Menu
+                        anchorEl={anchorEl}
+                        id="account-menu"
+                        open={open}
+                        onClose={handleClose}
+                        onClick={handleClose}
+                        PaperProps={{
+                            elevation: 0,
+                            sx: {
+                                color: "#d1d7db",
+                                bgcolor: "#233138",
+                            },
                         }}
-                        sx={{
-                            color: "#4c5c66",
-                            border: "1px solid #2f3b43",
-                            borderRadius: "50px",
-                            padding: "5px 10px"
-                        }}
+                        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                     >
-                        <VideoCallIcon sx={{ marginRight: "6px" }} />
-                        <DownArrowIcon height={13} width={13} colour={"#4c5c66"} />
-                    </IconButton>
-                    <IconButton
-                        sx={{
-                            padding: "0px 8px"
-                        }}
-                    >
-                        <SearchIcon colour="#aebac1" height={30} width={30} />
-                    </IconButton>
-                    <IconButton>
-                        <MenuDotIcon />
-                    </IconButton>
+                        {menuItems.map((item, index) => (
+                            <MenuItem
+                                key={index}
+                                onClick={handleClose}
+                                sx={{
+                                    fontFamily: "inherit",
+                                    padding: "9px 58px 9px 24px",
+                                    fontSize: "14.5px",
+                                    '&:hover': { bgcolor: "#182229" },
+                                }}
+                            >
+                                {item}
+                            </MenuItem>
+                        ))}
+                    </Menu>
                 </Stack>
             </Stack>
         </>

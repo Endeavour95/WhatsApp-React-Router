@@ -9,8 +9,7 @@ export default function LeftPannelBelowSearchBarButtons(props) {
   ];
 
   return (
-    <Box>
-    
+    <>
       <Stack
         direction="row"
         spacing="8px"
@@ -35,10 +34,7 @@ export default function LeftPannelBelowSearchBarButtons(props) {
               fontWeight: "400",
               fontFamily: "inherit",
               cursor: "pointer",
-              borderBottomRightRadius: "42px",
-              borderBottomLeftRadius: "42px",
-              borderTopRightRadius: "42px",
-              borderTopLeftRadius: "42px",
+              borderRadius:"42px",
               '&:hover': {
                 bgcolor: props.belowSearchBarButtons[button.id] ? '#0a332c' : '#26353d',
               },
@@ -54,7 +50,7 @@ export default function LeftPannelBelowSearchBarButtons(props) {
           bgcolor: "#262f34",
         }}
       />
-    </Box>
+    </>
   );
 }
 

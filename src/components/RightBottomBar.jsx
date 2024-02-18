@@ -1,20 +1,36 @@
-import { Grid, IconButton, Box, Input, Stack, List, ListItem, Dialog, Paper, Typography, Button, TextField } from "@mui/material";
-import { useState, useEffect } from "react";
+import { Grid, IconButton, Box, Input, Stack, List, ListItem, Dialog, Paper, Typography, Button, TextField, Tooltip } from "@mui/material";
+import { useState, useEffect, useRef } from "react";
 import SmileyIcon, { AttachMenuPlusIcon, SendIcon, VoiceCommandIcon } from "../Icons/RightBottomBarIcons";
 import DocumentIcon, { PhotoVideoIcon, CameraIconAdvanced, ContactIcon, PollIcon, NewStickerIcon } from "../Icons/AttachmentModalIcons";
+import { useSelector, useDispatch } from "react-redux";
+import { setChats } from "../slices/chatsSlice";
 
 export default function RightBottomBar(props) {
+    const chats = useSelector((state) => state.chats.chats)
+
+    const selectedUserMobileNo = useSelector((state) => state.users.selectedUserMobileNo)
+
+    const dispatch = useDispatch()
+
+    const inputRef = useRef(null)
+
     const [textToSend, setTextToSend] = useState("")
 
     const [rotation, setRotation] = useState(0);
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    useEffect(() => {
+      if (selectedUserMobileNo) {
+        inputRef.current.focus()
+      }
+    }, [selectedUserMobileNo])
+    
+    
     const handleRotateClick = () => {
         const newRotation = rotation === 0 ? 135 : 0;
         setRotation(newRotation);
     };
-
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
     const handleOpenModal = () => {
         handleRotateClick()
         setIsModalOpen(true);
@@ -71,11 +87,9 @@ export default function RightBottomBar(props) {
                                 <Typography
                                     sx={{
                                         color: '#d1d7db',
-                                        font: 'inherit',
+                                        fonfontFamilyt: 'inherit',
                                         fontSize: '16px',
                                         textAlign: 'left',
-                                        fontFamily:
-                                            'Segoe UI,Helvetica Neue,Helvetica,Lucida Grande,Arial,Ubuntu,Cantarell,Fira Sans,sans-serif',
                                     }}
                                 >
                                     {option.label}
@@ -89,8 +103,8 @@ export default function RightBottomBar(props) {
     }
 
     function generateMessage() {
-        props.setChats([...props.chats, {
-            "messageId": Number(props.chats[props.chats.length - 1].messageId) + 1,
+        dispatch(setChats({
+            "messageId": Number(chats[chats.length - 1].messageId) + 1,
             "messageText": textToSend,
             "messageTime": new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
             "messageDate": new Date().toLocaleDateString([], {
@@ -98,11 +112,27 @@ export default function RightBottomBar(props) {
                 month: 'numeric',
                 day: 'numeric',
             }),
-            "userMobileNo": props.selectedUser.userMobileNo,
+            "userMobileNo": selectedUserMobileNo,
             "deliverdStatus": false,
             "readStatus": false,
-        }]);
+        }))
     }
+
+    // function generateMessage() {
+    //     props.setChats([...props.chats, {
+    //         "messageId": Number(props.chats[props.chats.length - 1].messageId) + 1,
+    //         "messageText": textToSend,
+    //         "messageTime": new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+    //         "messageDate": new Date().toLocaleDateString([], {
+    //             year: 'numeric',
+    //             month: 'numeric',
+    //             day: 'numeric',
+    //         }),
+    //         "userMobileNo": props.selectedUser.userMobileNo,
+    //         "deliverdStatus": false,
+    //         "readStatus": false,
+    //     }]);
+    // }
 
     // function generateReplyMessage() {
     //     props.setChats([...props.chats,
@@ -167,55 +197,58 @@ export default function RightBottomBar(props) {
                     <IconButton>
                         <SmileyIcon />
                     </IconButton>
-                    <IconButton>
-                        <AttachMenuPlusIcon
-                            onClick={() => { handleOpenModal() }}
+                    <Tooltip title="Attach">
+                        <IconButton
                             sx={{
-                                transform: `rotate(${rotation}deg)`,
-                                transition: 'transform 0.5s ease',
+                                borderRadius: "50%",
+                                bgcolor: rotation == 135 ? "#374248" : "#202c33"
+                            }}
+                        >
+                            <AttachMenuPlusIcon
+                                onClick={() => { handleOpenModal() }}
+                                sx={{
+                                    transform: `rotate(${rotation}deg)`,
+                                    transition: 'transform 0.4s ease',
+                                }}
+                            />
+                        </IconButton>
+                    </Tooltip>
+                    {/* <Tooltip title="Type a message"> */}
+                        <Input
+                            inputRef={inputRef}
+                            variant="standard"
+                            id="messageText"
+                            onKeyUp={(e) => {
+                                if (e.key === "Enter") {
+                                    generateMessage()
+                                    setTextToSend("")
+
+                                    // exampleFunction();
+                                    // setTimeout(() => {
+                                    //     generateReplyMessage()
+                                    // }, 10000);
+
+                                }
+                            }}
+                            onChange={(e) => {
+                                setTextToSend(e.currentTarget.value)
+                            }}
+                            placeholder=" Type a message"
+                            value={textToSend}
+                            disableUnderline
+                            sx={{
+                                margin: "5px 8px",
+                                padding: "5px 12px",
+                                borderRadius: "8px",
+                                color: "#d1d7db",
+                                bgcolor: "#2a3942",
+                                textDecoration: "none",
+                                fontFamily: "inherit",
+                                fontSize: "15px",
+                                width: "100%"
                             }}
                         />
-                    </IconButton>
-                    <Input
-                        variant="standard"
-                        id="messageText"
-                        onKeyUp={(e) => {
-                            if (e.key === "Enter") {
-                                // exampleFunction();
-
-                                generateMessage()
-                                setTextToSend("")
-
-                                // console.log("first", props.chats)
-                                // setTimeout(() => {
-                                //     generateReplyMessage()
-                                //     console.log("second", props.chats)
-                                // }, 10000);
-                                // console.log("third", props.chats)
-
-                            }
-                        }}
-                        onChange={(e) => {
-                            setTextToSend(e.currentTarget.value)
-                        }}
-                        placeholder=" Type a message"
-                        value={textToSend}
-                        // InputProps={{
-                        //     disableUnderline:'true'
-                        // }}
-                        disableUnderline
-                        fullWidth
-                        sx={{
-                            margin: "5px 8px",
-                            padding: "5px 12px",
-                            borderRadius: "8px",
-                            color: "#d1d7db",
-                            bgcolor: "#2a3942",
-                            textDecoration: "none",
-                            fontFamily: "inherit",
-                            fontSize: "15px",
-                        }}
-                    />
+                    {/* </Tooltip> */}
                 </Stack>
                 <IconButton>
                     {

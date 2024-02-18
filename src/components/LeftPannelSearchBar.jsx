@@ -1,17 +1,19 @@
-import { Grid, Box, Stack, Button, Input, TextField, IconButton, CircularProgress } from "@mui/material"
+import { Grid, Box, Stack, Button, Input, TextField, IconButton, CircularProgress, Tooltip } from "@mui/material"
 import SvgIcon from '@mui/material/SvgIcon';
 import SearchIcon, { BackIcon, XAltIcon } from "../Icons/SearchBarIcons";
 import { useState, useEffect, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setSearchText } from "../slices/chatsSlice";
+import { Propane } from "@mui/icons-material";
 
-export default function LeftPannelSearchBar(props) {
+export default function LeftPannelSearchBar() {
+    const searchText = useSelector((state) => state.chats.searchText)
+
+    const dispatch = useDispatch()
+
     const inputRef = useRef(null);
 
-    useEffect(() => {
-        if (props.allButtons.backIcon) {
-            // Focus the input field when backIcon is true
-            inputRef.current.focus();
-        }
-    }, [props.allButtons.backIcon]);
+    const [searchIcon, setSearchIcon] = useState(true)
 
     const [xaltIcon, setXaltIcon] = useState(false)
 
@@ -29,68 +31,66 @@ export default function LeftPannelSearchBar(props) {
 
     return (
         <>
-                <Stack
-                    direction="row"
-                    sx={{
-                        height: "35px",
-                        bgcolor: "#202C33",
-                        borderTopLeftRadius: "8px",
-                        borderBottomLeftRadius: "8px",
-                    }}
-                >
-                    {
-                        props.allButtons.searchIcon ? (
-                            <IconButton
-                                sx={{
-                                    paddingLeft: "12px",
-                                    paddingRight: "17px",
-                                }}
-                                id="searchIcon"
-                                onClick={(e) => {
-                                    props.allButtonsSetter(e.currentTarget.id, false)
-                                    props.allButtonsSetter("backIcon", true)
-                                    // console.log("inputfrf", inputRef)
-                                    // inputRef.current.focus();
-                                }}
-                            >
-                                <SearchIcon
-                                    colour="#8696a0" height={24} width={24}
-                                />
-                            </IconButton>
-                        ) : (
-                            <IconButton
-                                sx={{
-                                    paddingLeft: "12px",
-                                    paddingRight: "17px",
-                                }}
-                                id="backIcon"
-                                onClick={(e) => {
-                                    props.allButtonsSetter("searchIcon", true)
-                                    props.allButtonsSetter(e.currentTarget.id, false)
-                                    setXaltIcon(false)
-                                    props.setSearchText("")
-                                }}
-                            >
-                                <BackIcon
-                                    colour="#00a884"
-                                />
-                            </IconButton>
-                        )
-                    }
-                </Stack>
+            <Stack
+                direction="row"
+                sx={{
+                    height: "35px",
+                    bgcolor: "#202C33",
+                    borderTopLeftRadius: "8px",
+                    borderBottomLeftRadius: "8px",
+                }}
+            >
+                {
+                    searchIcon ? (
+                        <IconButton
+                            sx={{
+                                paddingLeft: "12px",
+                                paddingRight: "17px",
+                            }}
+                            id="searchIcon"
+                            onClick={(e) => {
+                                setSearchIcon(false)
+                                inputRef.current.focus();
+                            }}
+                        >
+                            <SearchIcon
+                                colour="#8696a0" height={24} width={24}
+                            />
+                        </IconButton>
+                    ) : (
+                        <IconButton
+                            sx={{
+                                paddingLeft: "12px",
+                                paddingRight: "17px",
+                            }}
+                            id="backIcon"
+                            onClick={(e) => {
+                                setSearchIcon(true)
+                                setXaltIcon(false)
+                                dispatch(setSearchText(""))
+                            }}
+                        >
+                            <BackIcon
+                                colour="#00a884"
+                            />
+                        </IconButton>
+                    )
+                }
+            </Stack>
+            {/* <Tooltip title="Search input textbox"> */}
                 <Input
                     id="messageField"
-                    ref={inputRef}
+                    inputRef={inputRef}
 
                     onClick={() => {
-                        props.allButtonsSetter("searchIcon", false)
+                        setSearchIcon(false)
                     }}
                     onChange={(e) => {
-                        props.setSearchText(e.currentTarget.value)
+                        dispatch(setSearchText(e.currentTarget.value))
                         handleCircularProgress()
                     }}
                     placeholder="Search or start a new chat"
-                    value={props.searchText}
+                    value={searchText}
                     fullWidth
                     disableUnderline
                     sx={{
@@ -103,186 +103,66 @@ export default function LeftPannelSearchBar(props) {
                         textDecoration: "none",
                         lineHeight: "inherit",
                         fontSize: "15px",
-                        // ":focus": {{props.allButtons.backIcon}}
                     }}
                 />
-
-                <Stack
-                    direction="row"
-                    sx={{
-                        height: "35px",
-                        bgcolor: "#202C33",
-                        borderTopRightRadius: "8px",
-                        borderBottomRightRadius: "8px",
-                    }}
-                >
-                    {/* {
-                        props.allButtons.searchIcon ? (
-                            <IconButton
+            {/* </Tooltip> */}
+            <Stack
+                direction="row"
+                sx={{
+                    height: "35px",
+                    bgcolor: "#202C33",
+                    borderTopRightRadius: "8px",
+                    borderBottomRightRadius: "8px",
+                }}
+            >
+                {
+                    (xaltIcon === false && circularProgress === false) || searchText === "" ? (
+                        <IconButton
+                            sx={{
+                                paddingLeft: "0px",
+                            }}
+                        >
+                            <></>
+                        </IconButton>
+                    ) : xaltIcon ? (
+                        <IconButton
+                            sx={{
+                                paddingLeft: "0px",
+                            }}
+                            onClick={(e) => {
+                                dispatch(setSearchText(''))
+                            }}
+                        >
+                            <XAltIcon
+                                colour="#8696a0"
+                            />
+                        </IconButton>
+                    ) : circularProgress ? (
+                        <IconButton
+                            sx={{
+                                paddingLeft: "0px",
+                            }}
+                        >
+                            <CircularProgress
+                                variant="indeterminate"
+                                thickness={5}
+                                size={20}
                                 sx={{
-                                    paddingLeft: "0px",
+                                    color: "#00a884",
                                 }}
-                            >
-                                <></>
-                            </IconButton>
-                        ) :
-                            props.searchText !== "" && loading ? (
-                                <IconButton
-                                    sx={{
-                                        paddingLeft: "0px",
-                                    }}
-                                >
-                                    <CircularProgress
-                                        variant="indeterminate"
-                                        thickness={5}
-                                        size={20}
-                                        sx={{
-                                            color: "#00a884",
-                                        }}
-                                    />
-                                </IconButton>
-                            ) : (
-                                props.searchText !== "" && loading === false ? (
-                                    <IconButton
-                                        sx={{
-                                            paddingLeft: "0px",
-                                        }}
-                                        onClick={(e) => {
-                                            props.setSearchText('')
-                                        }}
-                                    >
-                                        <XAltIcon
-                                            colour="#8696a0"
-                                        />
-                                    </IconButton>
-                                ) : (
-                                    <IconButton
-                                        sx={{
-                                            paddingLeft: "0px",
-                                        }}
-                                    >
-                                        <></>
-                                    </IconButton>
-                                )
-                            )
-                    } */}
-
-
-                    {/* {
-                        loading === true && props.searchText !== "" ? (
-                            <IconButton
-                                sx={{
-                                    paddingLeft: "0px",
-                                }}
-                            >
-                                <CircularProgress
-                                    variant="indeterminate"
-                                    thickness={5}
-                                    size={20}
-                                    sx={{
-                                        color: "#00a884",
-                                    }}
-                                />
-                            </IconButton>
-                        ) : (
-                            <IconButton
-                                sx={{
-                                    paddingLeft: "0px",
-                                }}
-                                onClick={(e) => {
-                                    props.setSearchText('')
-                                }}
-                            >
-                                <XAltIcon
-                                    colour="#8696a0"
-                                />
-                            </IconButton>
-                        )
-                    } */}
-                    {
-                        (xaltIcon === false && circularProgress === false) || props.searchText === "" ? (
-                            <IconButton
-                                sx={{
-                                    paddingLeft: "0px",
-                                }}
-                            >
-                                <></>
-                            </IconButton>
-                        ) : xaltIcon ? (
-                            <IconButton
-                                sx={{
-                                    paddingLeft: "0px",
-                                }}
-                                onClick={(e) => {
-                                    props.setSearchText('')
-                                }}
-                            >
-                                <XAltIcon
-                                    colour="#8696a0"
-                                />
-                            </IconButton>
-                        ) : circularProgress ? (
-                            <IconButton
-                                sx={{
-                                    paddingLeft: "0px",
-                                }}
-                            >
-                                <CircularProgress
-                                    variant="indeterminate"
-                                    thickness={5}
-                                    size={20}
-                                    sx={{
-                                        color: "#00a884",
-                                    }}
-                                />
-                            </IconButton>
-                        ) : (
-                            <IconButton
-                                sx={{
-                                    paddingLeft: "0px",
-                                }}
-                            >
-                                <></>
-                            </IconButton>
-                        )
-                    }
-
-
-                    {/* {
-                        props.searchText !== "" ? (
-                            <IconButton
-                                sx={{
-                                    paddingLeft: "0px",
-                                }}
-                                onClick={(e) => {
-                                    props.setSearchText('')
-                                }}
-                            >
-                                <XAltIcon
-                                    colour="#8696a0"
-                                />
-                            </IconButton>
-
-                        ) : (
-                            <>
-                                <IconButton
-                                    sx={{
-                                        paddingLeft: "0px",
-                                    }}
-                                >
-                                    <CircularProgress
-                                        variant="indeterminate"
-                                        thickness={5}
-                                        size={20}
-                                        sx={{
-                                            color: "#00a884",
-                                        }}
-                                    />
-                                </IconButton>
-                            </>
-                        )
-                    } */}
-                </Stack>
+                            />
+                        </IconButton>
+                    ) : (
+                        <IconButton
+                            sx={{
+                                paddingLeft: "0px",
+                            }}
+                        >
+                            <></>
+                        </IconButton>
+                    )
+                }
+            </Stack>
         </>
     )
 }
