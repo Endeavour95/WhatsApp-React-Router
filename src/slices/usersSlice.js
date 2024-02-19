@@ -103,7 +103,7 @@ export const userSlice = createSlice({
             },
             {
                 "userName": "Akash Kharat",
-                "profilePicture": "https://media-pnq1-2.cdn.whatsapp.net/v/t61.24694-24/298671268_436032878476595_472822148243604340_n.jpg?ccb=11-4&oh=01_AdQ_r3JDM_JnDje8XaAlYCBBe_RdyaCdCdeADVM_AaDxHQ&oe=65DD990C&_nc_sid=e6ed6c&_nc_cat=109",
+                "profilePicture": "",
                 "countryCode": "+91",
                 "userMobileNo": "9373429068",
                 "userAbout": "Available",

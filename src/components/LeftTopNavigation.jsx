@@ -180,7 +180,7 @@ export default function LeftTopNavigation() {
                             onClick={handleClose}
                             sx={{
                                 fontFamily: "inherit",
-                                padding: "9px 58px 9px 24px",
+                                padding: "9px 24px 9px 24px",
                                 fontSize: "14.5px",
                                 '&:hover': { bgcolor: "#182229" }
                             }}

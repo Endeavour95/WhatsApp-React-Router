@@ -1,28 +1,19 @@
 import { Divider, Grid } from "@mui/material";
 import Left from "./Left";
 import Right from "./Right";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DefaultRightPannel from "./DefaultRightPannel";
 import { useSelector, useDispatch } from "react-redux";
+import { fetchChats } from "../slices/chatsSlice";
 
 export default function MainPage() {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchChats());
+    }, [dispatch]);
+
     const selectedUserMobileNo = useSelector((state) => state.users.selectedUserMobileNo)
-
-    const [allButtons, setAllButtons] = useState(
-        {
-            "personalProfileIcon": false,
-            "searchIcon": true,
-            "backIcon": false,
-        }
-    )
-
-    function allButtonsSetter(buttonName, buttonValue) {
-        setAllButtons((oldButtonsStatus) => ({
-            ...oldButtonsStatus,
-            [buttonName]: buttonValue,
-        }))
-    }
-
 
     // function makeMessageReadAndDelivered() {
     //     const lastChatIndex = chats.length - 1;
@@ -116,11 +107,7 @@ export default function MainPage() {
                         width: "100%"
                     }}
                 >
-                    <Left
-                        allButtons={allButtons}
-                        setAllButtons={setAllButtons}
-                        allButtonsSetter={allButtonsSetter}
-                    />
+                    <Left />
                 </Grid>
                 <Divider
                     sx={{

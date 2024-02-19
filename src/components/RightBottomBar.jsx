@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import SmileyIcon, { AttachMenuPlusIcon, SendIcon, VoiceCommandIcon } from "../Icons/RightBottomBarIcons";
 import DocumentIcon, { PhotoVideoIcon, CameraIconAdvanced, ContactIcon, PollIcon, NewStickerIcon } from "../Icons/AttachmentModalIcons";
 import { useSelector, useDispatch } from "react-redux";
-import { setChats } from "../slices/chatsSlice";
+import { setChats, setNewChats, updateMessageStatus } from "../slices/chatsSlice";
 
 export default function RightBottomBar(props) {
     const chats = useSelector((state) => state.chats.chats)
@@ -16,17 +16,68 @@ export default function RightBottomBar(props) {
 
     const [textToSend, setTextToSend] = useState("")
 
+    const [textToReceive, setTextToReceive] = useState("")
+
     const [rotation, setRotation] = useState(0);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    const [updateState, setUpdateState] = useState(false)
+
+    // function messageUpdate() {
+    //     const lastChat = chats[chats.length - 1]
+    //     if (Object.hasOwn(lastChat, "deliverdStatus")) {
+    //         setTimeout(() => {
+    //             dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "deliverdStatus", value: true }))
+    //         }, 2000);
+    //         setTimeout(() => {
+    //             dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "readStatus", value: true }))
+    //         }, 5000);
+    //         setTimeout(() => {
+    //             generateReplyMessage()
+    //         }, 10000);
+    //     }
+    // }
+
     useEffect(() => {
-      if (selectedUserMobileNo) {
-        inputRef.current.focus()
-      }
+        const lastChat = chats[chats.length - 1]
+        if (Object.hasOwn(lastChat, "deliverdStatus")) {
+            setTimeout(() => {
+                dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "deliverdStatus", value: true }))
+            }, 2000);
+            setTimeout(() => {
+                dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "readStatus", value: true }))
+            }, 5000);
+            setTimeout(() => {
+                setUpdateState(generateReplyMessage())
+            }, 10000);
+        }
+    }, [updateState])
+
+    // useEffect(() => {
+    //     const lastChat = chats[chats.length - 1]
+    //     if (Object.keys(lastChat).includes("deliverdStatus")) {
+
+    //     // if (Object.hasOwn(lastChat, "deliverdStatus")) {
+    //         setTimeout(() => {
+    //             dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "deliverdStatus", value: true }))
+    //         }, 2000);
+    //         setTimeout(() => {
+    //             dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "readStatus", value: true }))
+    //         }, 5000);
+    //         setTimeout(() => {
+    //             generateReplyMessage()
+    //         }, 10000);
+    //     }
+    // }, [chats])
+
+    useEffect(() => {
+        if (selectedUserMobileNo) {
+            inputRef.current.focus()
+        }
     }, [selectedUserMobileNo])
-    
-    
+
+
     const handleRotateClick = () => {
         const newRotation = rotation === 0 ? 135 : 0;
         setRotation(newRotation);
@@ -104,7 +155,7 @@ export default function RightBottomBar(props) {
 
     function generateMessage() {
         dispatch(setChats({
-            "messageId": Number(chats[chats.length - 1].messageId) + 1,
+            "messageId": chats.length < 1 ? 1 : Number(chats[chats.length - 1].messageId) + 1,
             "messageText": textToSend,
             "messageTime": new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
             "messageDate": new Date().toLocaleDateString([], {
@@ -116,60 +167,47 @@ export default function RightBottomBar(props) {
             "deliverdStatus": false,
             "readStatus": false,
         }))
+        setTextToReceive(textToSend)
+        setTextToSend("")
+        // setTimeout(() => {
+        //     messageUpdate()
+        // }, 10000);
+
     }
 
-    // function generateMessage() {
-    //     props.setChats([...props.chats, {
-    //         "messageId": Number(props.chats[props.chats.length - 1].messageId) + 1,
-    //         "messageText": textToSend,
-    //         "messageTime": new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
-    //         "messageDate": new Date().toLocaleDateString([], {
-    //             year: 'numeric',
-    //             month: 'numeric',
-    //             day: 'numeric',
-    //         }),
-    //         "userMobileNo": props.selectedUser.userMobileNo,
-    //         "deliverdStatus": false,
-    //         "readStatus": false,
-    //     }]);
+    // function messageUpdate() {
+
+    //     const lastChat = chats[chats.length - 1]
+    //     if (Object.hasOwn(lastChat, "deliverdStatus")) {
+    //         console.log("messageUpdate")
+    //         setTimeout(() => {
+    //             dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "deliverdStatus", value: true }))
+    //         }, 2000);
+    //         setTimeout(() => {
+    //             dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "readStatus", value: true }))
+    //         }, 5000);
+    //         setTimeout(() => {
+    //             generateReplyMessage()
+    //         }, 10000);
+    //     }
     // }
 
-    // function generateReplyMessage() {
-    //     props.setChats([...props.chats,
-    //     {
-    //         "messageId": Number(props.chats[props.chats.length - 1].messageId) + 1,
-    //         "messageText": textToSend + " reply Message",
-    //         "messageTime": new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
-    //         "messageDate": new Date().toLocaleDateString([], {
-    //             year: 'numeric',
-    //             month: 'numeric',
-    //             day: 'numeric',
-    //         }),
-    //         "userMobileNo": props.selectedUser.userMobileNo,
-    //     }])
-
-    //     setTextToSend("")
-    // }
-
-
-
-    // const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
-    // const exampleFunction = async () => {
-    //     await generateMessage();
-    //     console.log("first", props.chats);
-
-    //     await delay(10000); // Adding a delay using a promise
-
-    //     await generateReplyMessage();
-    //     console.log("second", props.chats);
-
-    //     console.log("third", props.chats);
-    // };
-
-    // Call the exampleFunction
-    // exampleFunction();
-
+    function generateReplyMessage() {
+        dispatch(setChats({
+            "messageId": chats.length < 1 ? 1 : Number(chats[chats.length - 1].messageId) + 1,
+            "messageText": textToReceive + " reply Message",
+            "messageTime": new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+            "messageDate": new Date().toLocaleDateString([], {
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric',
+            }),
+            "userMobileNo": selectedUserMobileNo,
+        }))
+        // setTextToSend("")
+        setTextToReceive("")
+        return false
+    }
 
     return (
         <>
@@ -199,13 +237,13 @@ export default function RightBottomBar(props) {
                     </IconButton>
                     <Tooltip title="Attach">
                         <IconButton
+                            onClick={() => { handleOpenModal() }}
                             sx={{
                                 borderRadius: "50%",
                                 bgcolor: rotation == 135 ? "#374248" : "#202c33"
                             }}
                         >
                             <AttachMenuPlusIcon
-                                onClick={() => { handleOpenModal() }}
                                 sx={{
                                     transform: `rotate(${rotation}deg)`,
                                     transition: 'transform 0.4s ease',
@@ -214,40 +252,36 @@ export default function RightBottomBar(props) {
                         </IconButton>
                     </Tooltip>
                     {/* <Tooltip title="Type a message"> */}
-                        <Input
-                            inputRef={inputRef}
-                            variant="standard"
-                            id="messageText"
-                            onKeyUp={(e) => {
-                                if (e.key === "Enter") {
+                    <Input
+                        inputRef={inputRef}
+                        variant="standard"
+                        id="messageText"
+                        onKeyUp={(e) => {
+                            if (e.key === "Enter") {
+                                if (textToSend) {
                                     generateMessage()
-                                    setTextToSend("")
-
-                                    // exampleFunction();
-                                    // setTimeout(() => {
-                                    //     generateReplyMessage()
-                                    // }, 10000);
-
+                                    setUpdateState(true)
                                 }
-                            }}
-                            onChange={(e) => {
-                                setTextToSend(e.currentTarget.value)
-                            }}
-                            placeholder=" Type a message"
-                            value={textToSend}
-                            disableUnderline
-                            sx={{
-                                margin: "5px 8px",
-                                padding: "5px 12px",
-                                borderRadius: "8px",
-                                color: "#d1d7db",
-                                bgcolor: "#2a3942",
-                                textDecoration: "none",
-                                fontFamily: "inherit",
-                                fontSize: "15px",
-                                width: "100%"
-                            }}
-                        />
+                            }
+                        }}
+                        onChange={(e) => {
+                            setTextToSend(e.currentTarget.value)
+                        }}
+                        placeholder=" Type a message"
+                        value={textToSend}
+                        disableUnderline
+                        sx={{
+                            margin: "5px 8px",
+                            padding: "5px 12px",
+                            borderRadius: "8px",
+                            color: "#d1d7db",
+                            bgcolor: "#2a3942",
+                            textDecoration: "none",
+                            fontFamily: "inherit",
+                            fontSize: "15px",
+                            width: "100%"
+                        }}
+                    />
                     {/* </Tooltip> */}
                 </Stack>
                 <IconButton>
@@ -256,7 +290,7 @@ export default function RightBottomBar(props) {
                             <SendIcon
                                 onClick={() => {
                                     generateMessage()
-                                    setTextToSend("")
+                                    setUpdateState(true)
                                 }}
                             />
                             :

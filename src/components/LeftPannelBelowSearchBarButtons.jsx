@@ -1,6 +1,12 @@
 import { Stack, IconButton, Divider, Box } from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
+import { setLeftBelowSearchBarButtons } from "../slices/buttonsSlice";
 
 export default function LeftPannelBelowSearchBarButtons(props) {
+  const leftBelowSearchBarButtons = useSelector((state) => state.buttons.leftBelowSearchBarButtons)
+
+  const dispatch = useDispatch()
+
   const buttonData = [
     { id: "buttonAll", label: "All" },
     { id: "buttonUnread", label: "Unread" },
@@ -24,19 +30,21 @@ export default function LeftPannelBelowSearchBarButtons(props) {
             key={button.id}
             id={button.id}
             onClick={(e) => {
-              props.belowSearchBarButtonsSetter(e.currentTarget.id, true);
+              dispatch(setLeftBelowSearchBarButtons({buttonName: e.currentTarget.id, buttonValue: true}))
+
+              // props.belowSearchBarButtonsSetter(e.currentTarget.id, true);
             }}
             sx={{
               padding: "6px 12px",
-              color: props.belowSearchBarButtons[button.id] ? '#00a884' : '#8696A0',
-              bgcolor: props.belowSearchBarButtons[button.id] ? '#0a332c' : '#202C33',
+              color: leftBelowSearchBarButtons[button.id] ? '#00a884' : '#8696A0',
+              bgcolor: leftBelowSearchBarButtons[button.id] ? '#0a332c' : '#202C33',
               fontSize: "15px",
               fontWeight: "400",
               fontFamily: "inherit",
               cursor: "pointer",
               borderRadius:"42px",
               '&:hover': {
-                bgcolor: props.belowSearchBarButtons[button.id] ? '#0a332c' : '#26353d',
+                bgcolor: leftBelowSearchBarButtons[button.id] ? '#0a332c' : '#26353d',
               },
             }}
           >

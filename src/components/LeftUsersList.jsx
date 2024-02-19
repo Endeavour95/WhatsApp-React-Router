@@ -54,6 +54,8 @@ export default function LeftUsersList(props) {
 
     const selectedUserMobileNo = useSelector((state) => state.users.selectedUserMobileNo)
 
+    const leftBelowSearchBarButtons = useSelector((state) => state.buttons.leftBelowSearchBarButtons)
+
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -62,7 +64,7 @@ export default function LeftUsersList(props) {
 
     const [dropdownIconIndex, setDropdownIconIndex] = useState(null);
 
-    let usersList = getUsers(users, searchText, props.belowSearchBarButtons)
+    let usersList = getUsers(users, searchText, leftBelowSearchBarButtons)
 
 
     function getLastMessageText(userMobileNo) {
@@ -137,6 +139,7 @@ export default function LeftUsersList(props) {
                                         return (
                                             <>
                                                 <ListItem
+                                                    key={user.userName}
                                                     onClick={() => {
                                                         dispatch(setSelectedUserMobileNo(user.userMobileNo))
                                                         // props.setSelectedUser(user)

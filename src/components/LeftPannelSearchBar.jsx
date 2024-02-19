@@ -4,7 +4,6 @@ import SearchIcon, { BackIcon, XAltIcon } from "../Icons/SearchBarIcons";
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setSearchText } from "../slices/chatsSlice";
-import { Propane } from "@mui/icons-material";
 
 export default function LeftPannelSearchBar() {
     const searchText = useSelector((state) => state.chats.searchText)
