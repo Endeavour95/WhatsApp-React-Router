@@ -4,18 +4,18 @@ export const buttonsSlice = createSlice({
     name: 'buttons',
     initialState: {
         leftTopNavigationButtons: {
-            "personalProfileIcon": false,
-            "communityOutlineIcon": false,
-            "statusUnreadIcon": false,
-            "newsletterOutlineIcon": false,
-            "newChatOutlineIcon": false,
-            "menuDotIcon": false
+            personalProfileIcon: false,
+            communityOutlineIcon: false,
+            statusUnreadIcon: false,
+            newsletterOutlineIcon: false,
+            newChatOutlineIcon: false,
+            menuDotIcon: false
         },
         leftBelowSearchBarButtons: {
-            "buttonAll": true,
-            "buttonUnread": false,
-            "buttonContacts": false,
-            "buttonGroups": false
+            buttonAll: true,
+            buttonUnread: false,
+            buttonContacts: false,
+            buttonGroups: false
         },
     },
     reducers: {
@@ -26,7 +26,7 @@ export const buttonsSlice = createSlice({
             state.leftTopNavigationButtons[action.payload.buttonName] = action.payload.buttonValue
         },
         setLeftBelowSearchBarButtons: (state, action) => {
-            state.leftBelowSearchBarButtons = Object.fromEntries(Object.entries(state.leftBelowSearchBarButtons).map(([name, value])=>[name, name === action.payload.buttonName ? action.payload.buttonValue : false]))
+            state.leftBelowSearchBarButtons = Object.fromEntries(Object.entries(state.leftBelowSearchBarButtons).map(([name, value]) => [name, name === action.payload.buttonName ? action.payload.buttonValue : false]))
         }
     },
 })

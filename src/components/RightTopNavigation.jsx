@@ -4,14 +4,12 @@ import SearchIcon, { BackIcon } from "../Icons/SearchBarIcons";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Menu, MenuItem } from "@mui/material";
-import { setSelectedUserMobileNo } from "../slices/usersSlice";
+import { setSelectedUser } from "../slices/usersSlice";
 
 export default function RightTopNavigation() {
-    const users = useSelector((state) => state.users.users)
+    const peoples = useSelector((state) => state.peoples.peoples)
 
-    const selectedUserMobileNo = useSelector((state) => state.users.selectedUserMobileNo)
-
-    const selectedUser = users.find((user) => user.userMobileNo === selectedUserMobileNo)
+    const selectedUser = useSelector((state) => state.peoples.selectedUser)
 
     const dispatch = useDispatch()
 
@@ -162,7 +160,7 @@ export default function RightTopNavigation() {
                             display: { xs: 'block', sm: 'none' },
                         }}
                         onClick={(e)=>{
-                            dispatch(setSelectedUserMobileNo(""))
+                            dispatch(setSelectedUser({}))
                         }}
                     />
                     <IconButton

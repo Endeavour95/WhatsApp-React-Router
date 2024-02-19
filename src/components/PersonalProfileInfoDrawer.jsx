@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setButtonLeftTopNavigation } from "../slices/buttonsSlice";
 
 export default function PersonalProfileInfoDrawer() {
-    const personalInfo = useSelector((state) => state.users.personalInfo)
+    const personalInfo = useSelector((state) => state.peoples.personalInfo)
 
     const dispatch = useDispatch()
 

@@ -8,7 +8,7 @@ import { useRef, useEffect } from "react";
 export default function RightMiddleChatSection(props) {
     const chats = useSelector((state)=> state.chats.chats)
 
-    const selectedUserMobileNo = useSelector((state) => state.users.selectedUserMobileNo)
+    const selectedUser = useSelector((state) => state.peoples.selectedUser)
 
     const lastChatRef = useRef(null)
 
@@ -36,7 +36,7 @@ export default function RightMiddleChatSection(props) {
                 }}
             >
                 <List>
-                    {chats.filter((chat) => selectedUserMobileNo == chat.userMobileNo).map((chat, index , array) => (
+                    {chats.filter((chat) => selectedUser.userMobileNo == chat.userMobileNo).map((chat, index , array) => (
                         <ListItem
                             key={chat.messageId}
                             ref={index === array.length - 1 ? lastChatRef : null}

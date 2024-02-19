@@ -2,12 +2,12 @@ import { Avatar, IconButton, ListItem, Stack, List, Typography, Divider, Paper }
 import { useState, useEffect } from "react";
 import DefaultUserIcon, { DownArrowIcon } from "../Icons/LeftTopNavigationIcons";
 import { useSelector, useDispatch } from "react-redux";
-import { StarTwoTone } from "@mui/icons-material";
-import { setUnreadMessages, setSelectedUserMobileNo } from "../slices/usersSlice";
+import { setUnreadMessages, setSelectedUser } from "../slices/usersSlice";
+import { Menu, MenuItem } from "@mui/material";
 
-function getUsers(users, text, belowSearchBarButtons) {
+function getPeoples(peoples, text, belowSearchBarButtons) {
 
-    let usersList = [...users]
+    let peoplesList = [...peoples]
 
     if (Object.values(belowSearchBarButtons).includes(true)) {
         const selectedButton = Object.keys(belowSearchBarButtons).find(
@@ -18,10 +18,10 @@ function getUsers(users, text, belowSearchBarButtons) {
             case 'buttonAll':
                 break;
             case 'buttonUnread':
-                usersList = usersList.filter((user) => user.userUnreadMessages);
+                peoplesList = peoplesList.filter((user) => user.userUnreadMessages);
                 break;
             case 'buttonContacts':
-                usersList.sort((a, b) => a.userMobileNo.localeCompare(b.userMobileNo));
+                peoplesList.sort((a, b) => a.userMobileNo.localeCompare(b.userMobileNo));
                 break;
             case 'buttonGroups':
                 break;
@@ -31,14 +31,13 @@ function getUsers(users, text, belowSearchBarButtons) {
     }
 
     if (text) {
-        usersList = usersList.filter((user) =>
+        peoplesList = peoplesList.filter((user) =>
             user.userName.toLowerCase().includes(text.toLowerCase())
         );
     }
 
-    return usersList
+    return peoplesList
 }
-
 
 function truncateText(text) {
     const newText = text.length > 35 ? `${text.substring(0, 35)}...` : text;
@@ -50,22 +49,21 @@ export default function LeftUsersList(props) {
 
     const searchText = useSelector((state) => state.chats.searchText)
 
-    const users = useSelector((state) => state.users.users)
+    const peoples = useSelector((state) => state.peoples.peoples)
 
-    const selectedUserMobileNo = useSelector((state) => state.users.selectedUserMobileNo)
+    const selectedUser = useSelector((state) => state.peoples.selectedUser)
 
     const leftBelowSearchBarButtons = useSelector((state) => state.buttons.leftBelowSearchBarButtons)
 
     const dispatch = useDispatch()
 
-    useEffect(() => {
-        dispatch(setUnreadMessages(selectedUserMobileNo))
-    }, [selectedUserMobileNo]);
-
     const [dropdownIconIndex, setDropdownIconIndex] = useState(null);
 
-    let usersList = getUsers(users, searchText, leftBelowSearchBarButtons)
+    useEffect(() => {
+        dispatch(setUnreadMessages(selectedUser.userMobileNo))
+    }, [selectedUser])
 
+    let peoplesList = getPeoples(peoples, searchText, leftBelowSearchBarButtons)
 
     function getLastMessageText(userMobileNo) {
         if (chats.length > 0) {
@@ -83,8 +81,33 @@ export default function LeftUsersList(props) {
         return null;
     }
 
+    const menuItems = [
+        'Archive chat',
+        'Mute notifications',
+        'Delete chat',
+        'Pin chat',
+        'Mark as unread',
+        'Block',
+    ];
 
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        if (selectedUser.userMobileNo) {
+            // setSelectedUser({})
+            setAnchorEl(null);
+        } else {
+            // setSelectedUser({})
+            setAnchorEl(null);
+        }
+    };
 
+    const [clientXposition, setClientXposition] = useState(null)
+
+    const [clientYposition, setClientYposition] = useState(null)
 
     return (
         <>
@@ -105,7 +128,7 @@ export default function LeftUsersList(props) {
                 },
 
             }}> {
-                    usersList.length < 1 ? (
+                peoplesList.length < 1 ? (
                         <>
                             <Typography
                                 sx={{
@@ -124,8 +147,6 @@ export default function LeftUsersList(props) {
                         </>
                     ) : (
                         <>
-
-
                             <List
                                 sx={{
                                     padding: "0px",
@@ -135,15 +156,17 @@ export default function LeftUsersList(props) {
                                 }}
                             >
                                 {
-                                    usersList.map((user, index) => {
+                                    peoplesList.map((user, index) => {
                                         return (
                                             <>
                                                 <ListItem
                                                     key={user.userName}
-                                                    onClick={() => {
-                                                        dispatch(setSelectedUserMobileNo(user.userMobileNo))
-                                                        // props.setSelectedUser(user)
-                                                        // dispatch(setUnreadMessages(props.selectedUser))
+                                                    onClick={(e) => {
+                                                        if (open) {
+                                                            e.stopPropagation()
+                                                        } else {
+                                                            dispatch(setSelectedUser(user))
+                                                        }
                                                     }}
                                                     onMouseEnter={() => setDropdownIconIndex(index)}
                                                     onMouseLeave={() => setDropdownIconIndex(null)}
@@ -151,7 +174,7 @@ export default function LeftUsersList(props) {
                                                         padding: "0px 15px 0px 0px",
                                                         width: "100%",
                                                         boxSizing: "border-box",
-                                                        bgcolor: selectedUserMobileNo === user.userMobileNo ? "#2a3942" : "#111b21",
+                                                        bgcolor: selectedUser.userMobileNo === user.userMobileNo ? "#2a3942" : "#111b21",
                                                         '&:hover': { bgcolor: "#202c33" },
                                                         justifyContent: "space-between",
                                                         alignItems: "center"
@@ -233,8 +256,8 @@ export default function LeftUsersList(props) {
                                                             {
                                                                 user.userUnreadMessages && (
                                                                     <IconButton
-                                                                        onMouseEnter={() => setDropdownIconIndex(index)}
-                                                                        onMouseLeave={() => setDropdownIconIndex(null)}
+                                                                        // onMouseEnter={() => setDropdownIconIndex(index)}
+                                                                        // onMouseLeave={() => setDropdownIconIndex(null)}
                                                                         sx={{
                                                                             color: "#111b21",
                                                                             bgcolor: "#00a884",
@@ -249,9 +272,62 @@ export default function LeftUsersList(props) {
                                                                     </IconButton>
                                                                 )
                                                             }
-                                                            {dropdownIconIndex === index && (
+                                                            <IconButton
+                                                                id="DownArrowIcon"
+                                                                onClick={(e) => {
+                                                                    setClientXposition(e.clientX)
+                                                                    setClientYposition(e.clientY + 10)
+                                                                    e.stopPropagation();
+                                                                    // setDropdownIconIndex(index)
+                                                                    handleClick(e)
+                                                                }}
+                                                                aria-controls={open ? 'account-menu' : undefined}
+                                                                aria-haspopup="true"
+                                                                aria-expanded={open ? 'true' : undefined}
+                                                                sx={{
+                                                                    padding: "0px",
+                                                                    // '&:hover': { display: 'block' },
+                                                                    // display : "none",
+                                                                    display: dropdownIconIndex === index ? 'block' : 'none',
+                                                                    // visibility: dropdownIconIndex === index ? 'visible' : 'hidden',
+                                                                }}
+                                                            >
                                                                 <DownArrowIcon height={20} width={20} colour={"#8696a0"} />
-                                                            )}
+                                                            </IconButton>
+                                                            <Menu
+                                                                id="account-menu"
+                                                                anchorEl={anchorEl}
+                                                                anchorReference="anchorPosition"
+                                                                anchorPosition={{
+                                                                    top: open ? clientYposition : 0,
+                                                                    left: open ? clientXposition : 0,
+                                                                }}
+                                                                open={open}
+                                                                onClose={handleClose}
+                                                                onClick={handleClose}
+                                                                PaperProps={{
+                                                                    elevation: 0,
+                                                                    sx: {
+                                                                        color: "#d1d7db",
+                                                                        bgcolor: "#233138",
+                                                                    },
+                                                                }}
+                                                            >
+                                                                {menuItems.map((item, index) => (
+                                                                    <MenuItem
+                                                                        key={index}
+                                                                        onClick={handleClose}
+                                                                        sx={{
+                                                                            fontFamily: "inherit",
+                                                                            padding: "9px 58px 9px 24px",
+                                                                            fontSize: "14.5px",
+                                                                            '&:hover': { bgcolor: "#182229" },
+                                                                        }}
+                                                                    >
+                                                                        {item}
+                                                                    </MenuItem>
+                                                                ))}
+                                                            </Menu>
                                                         </Stack>
                                                     </Stack>
                                                 </ListItem >

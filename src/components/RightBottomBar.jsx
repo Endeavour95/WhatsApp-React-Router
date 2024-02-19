@@ -3,16 +3,12 @@ import { useState, useEffect, useRef } from "react";
 import SmileyIcon, { AttachMenuPlusIcon, SendIcon, VoiceCommandIcon } from "../Icons/RightBottomBarIcons";
 import DocumentIcon, { PhotoVideoIcon, CameraIconAdvanced, ContactIcon, PollIcon, NewStickerIcon } from "../Icons/AttachmentModalIcons";
 import { useSelector, useDispatch } from "react-redux";
-import { setChats, setNewChats, updateMessageStatus } from "../slices/chatsSlice";
+import { setChats, updateMessageStatus } from "../slices/chatsSlice";
 
 export default function RightBottomBar(props) {
     const chats = useSelector((state) => state.chats.chats)
 
-    const selectedUserMobileNo = useSelector((state) => state.users.selectedUserMobileNo)
-
-    const dispatch = useDispatch()
-
-    const inputRef = useRef(null)
+    const selectedUser = useSelector((state) => state.peoples.selectedUser)
 
     const [textToSend, setTextToSend] = useState("")
 
@@ -24,26 +20,22 @@ export default function RightBottomBar(props) {
 
     const [updateState, setUpdateState] = useState(false)
 
-    // function messageUpdate() {
-    //     const lastChat = chats[chats.length - 1]
-    //     if (Object.hasOwn(lastChat, "deliverdStatus")) {
-    //         setTimeout(() => {
-    //             dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "deliverdStatus", value: true }))
-    //         }, 2000);
-    //         setTimeout(() => {
-    //             dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "readStatus", value: true }))
-    //         }, 5000);
-    //         setTimeout(() => {
-    //             generateReplyMessage()
-    //         }, 10000);
-    //     }
-    // }
+    const inputRef = useRef(null)
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        if (selectedUser.userMobileNo) {
+            inputRef.current.focus()
+        }
+    }, [selectedUser])
+
 
     useEffect(() => {
         const lastChat = chats[chats.length - 1]
-        if (Object.hasOwn(lastChat, "deliverdStatus")) {
+        if (Object.hasOwn(lastChat, "deliveredStatus")) {
             setTimeout(() => {
-                dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "deliverdStatus", value: true }))
+                dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "deliveredStatus", value: true }))
             }, 2000);
             setTimeout(() => {
                 dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "readStatus", value: true }))
@@ -56,11 +48,11 @@ export default function RightBottomBar(props) {
 
     // useEffect(() => {
     //     const lastChat = chats[chats.length - 1]
-    //     if (Object.keys(lastChat).includes("deliverdStatus")) {
+    //     if (Object.keys(lastChat).includes("deliveredStatus")) {
 
-    //     // if (Object.hasOwn(lastChat, "deliverdStatus")) {
+    //     // if (Object.hasOwn(lastChat, "deliveredStatus")) {
     //         setTimeout(() => {
-    //             dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "deliverdStatus", value: true }))
+    //             dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "deliveredStatus", value: true }))
     //         }, 2000);
     //         setTimeout(() => {
     //             dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "readStatus", value: true }))
@@ -70,88 +62,6 @@ export default function RightBottomBar(props) {
     //         }, 10000);
     //     }
     // }, [chats])
-
-    useEffect(() => {
-        if (selectedUserMobileNo) {
-            inputRef.current.focus()
-        }
-    }, [selectedUserMobileNo])
-
-
-    const handleRotateClick = () => {
-        const newRotation = rotation === 0 ? 135 : 0;
-        setRotation(newRotation);
-    };
-    const handleOpenModal = () => {
-        handleRotateClick()
-        setIsModalOpen(true);
-    };
-
-    const handleCloseModal = () => {
-        handleRotateClick()
-        setIsModalOpen(false);
-    };
-
-    function AttachmentModal({ isOpen, onClose }) {
-        const attachmentOptions = [
-            { icon: <DocumentIcon colour="#7f66ff" />, label: 'Document' },
-            { icon: <PhotoVideoIcon colour="#007bfc" />, label: 'Photos & Videos' },
-            { icon: <CameraIconAdvanced colour="#ff2e74" />, label: 'Camera' },
-            { icon: <ContactIcon colour="#009de2" />, label: 'Contact' },
-            { icon: <PollIcon colour="#ffbc38" />, label: 'Poll' },
-            { icon: <NewStickerIcon colour="#02a698" />, label: 'New Sticker' },
-        ];
-
-        return (
-            <Dialog
-                open={isOpen}
-                onClose={(event, reason) => {
-                    onClose();
-                    if (reason === 'onBackdropClick') {
-                        handleCloseModal();
-                    }
-                }}
-            >
-                <Paper
-                    sx={{
-                        position: 'fixed',
-                        top: '48.7%',
-                        left: '34.2%',
-                        zIndex: 1,
-                        backgroundColor: '#233138',
-                        padding: '3px',
-                        borderRadius: '16px',
-                    }}
-                >
-                    <List>
-                        {attachmentOptions.map((option, index) => (
-                            <ListItem
-                                key={index}
-                                sx={{
-                                    margin: '0px 32px 0px 8px',
-                                    '&:hover': { bgcolor: '#182229', borderRadius: '8px' },
-                                    padding: '0px',
-                                    height: '40px',
-                                }}
-                            >
-                                <IconButton margin="0px 12px 0px 0px">{option.icon}</IconButton>
-                                <Typography
-                                    sx={{
-                                        color: '#d1d7db',
-                                        fonfontFamilyt: 'inherit',
-                                        fontSize: '16px',
-                                        textAlign: 'left',
-                                    }}
-                                >
-                                    {option.label}
-                                </Typography>
-                            </ListItem>
-                        ))}
-                    </List>
-                </Paper>
-            </Dialog>
-        );
-    }
 
     function generateMessage() {
         dispatch(setChats({
@@ -163,34 +73,13 @@ export default function RightBottomBar(props) {
                 month: 'numeric',
                 day: 'numeric',
             }),
-            "userMobileNo": selectedUserMobileNo,
-            "deliverdStatus": false,
+            "userMobileNo": selectedUser.userMobileNo,
+            "deliveredStatus": false,
             "readStatus": false,
         }))
         setTextToReceive(textToSend)
         setTextToSend("")
-        // setTimeout(() => {
-        //     messageUpdate()
-        // }, 10000);
-
     }
-
-    // function messageUpdate() {
-
-    //     const lastChat = chats[chats.length - 1]
-    //     if (Object.hasOwn(lastChat, "deliverdStatus")) {
-    //         console.log("messageUpdate")
-    //         setTimeout(() => {
-    //             dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "deliverdStatus", value: true }))
-    //         }, 2000);
-    //         setTimeout(() => {
-    //             dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "readStatus", value: true }))
-    //         }, 5000);
-    //         setTimeout(() => {
-    //             generateReplyMessage()
-    //         }, 10000);
-    //     }
-    // }
 
     function generateReplyMessage() {
         dispatch(setChats({
@@ -202,12 +91,26 @@ export default function RightBottomBar(props) {
                 month: 'numeric',
                 day: 'numeric',
             }),
-            "userMobileNo": selectedUserMobileNo,
+            "userMobileNo": selectedUser.userMobileNo,
         }))
-        // setTextToSend("")
         setTextToReceive("")
         return false
     }
+
+    const handleRotateClick = () => {
+        const newRotation = rotation === 0 ? 135 : 0;
+        setRotation(newRotation);
+    };
+
+    const handleOpenModal = () => {
+        handleRotateClick()
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        handleRotateClick()
+        setIsModalOpen(false);
+    };
 
     return (
         <>
@@ -300,4 +203,66 @@ export default function RightBottomBar(props) {
             </Stack>
         </>
     )
+}
+
+
+function AttachmentModal({ isOpen, onClose }) {
+    const attachmentOptions = [
+        { icon: <DocumentIcon colour="#7f66ff" />, label: 'Document' },
+        { icon: <PhotoVideoIcon colour="#007bfc" />, label: 'Photos & Videos' },
+        { icon: <CameraIconAdvanced colour="#ff2e74" />, label: 'Camera' },
+        { icon: <ContactIcon colour="#009de2" />, label: 'Contact' },
+        { icon: <PollIcon colour="#ffbc38" />, label: 'Poll' },
+        { icon: <NewStickerIcon colour="#02a698" />, label: 'New Sticker' },
+    ];
+
+    return (
+        <Dialog
+            open={isOpen}
+            onClose={(event, reason) => {
+                // onClose();
+                if (reason === 'backdropClick') {
+                    onClose()
+                }
+            }}
+        >
+            <Paper
+                sx={{
+                    position: 'fixed',
+                    top: '48.7%',
+                    left: '34.2%',
+                    zIndex: 1,
+                    backgroundColor: '#233138',
+                    padding: '3px',
+                    borderRadius: '16px',
+                }}
+            >
+                <List>
+                    {attachmentOptions.map((option, index) => (
+                        <ListItem
+                            key={index}
+                            sx={{
+                                margin: '0px 32px 0px 8px',
+                                '&:hover': { bgcolor: '#182229', borderRadius: '8px' },
+                                padding: '0px',
+                                height: '40px',
+                            }}
+                        >
+                            <IconButton margin="0px 12px 0px 0px">{option.icon}</IconButton>
+                            <Typography
+                                sx={{
+                                    color: '#d1d7db',
+                                    fonfontFamilyt: 'inherit',
+                                    fontSize: '16px',
+                                    textAlign: 'left',
+                                }}
+                            >
+                                {option.label}
+                            </Typography>
+                        </ListItem>
+                    ))}
+                </List>
+            </Paper>
+        </Dialog>
+    );
 }

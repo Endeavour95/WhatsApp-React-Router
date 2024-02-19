@@ -6,7 +6,7 @@ import buttonsReducer from './slices/buttonsSlice';
 export const store = configureStore({
   reducer: {
     chats : chatsReducer,
-    users : userReducer,
+    peoples : userReducer,
     buttons : buttonsReducer,
   },
 })
