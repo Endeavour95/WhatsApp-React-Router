@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { useRef, useEffect } from "react";
 
 
-export default function RightMiddleChatSection(props) {
+export default function RightMiddleChatSection() {
     const chats = useSelector((state)=> state.chats.chats)
 
     const selectedUser = useSelector((state) => state.peoples.selectedUser)
@@ -65,7 +65,7 @@ export default function RightMiddleChatSection(props) {
                                     </Typography>
                                     {
                                         Object.hasOwn(chat, "readStatus") ? (
-                                            chat.deliverdStatus ? (
+                                            chat.deliveredStatus ? (
                                                 <IconButton
                                                     sx={{
                                                         padding: "0px",

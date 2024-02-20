@@ -1,12 +1,4 @@
-import { Stack, Avatar, IconButton } from "@mui/material";
-import Tooltip from '@mui/material/Tooltip';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from '@mui/material/Divider';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
-import Logout from '@mui/icons-material/Logout';
+import { Stack, IconButton, Tooltip, Menu, MenuItem, Divider } from "@mui/material";
 import { useState } from "react";
 import DefaultUserIcon, { CommunityOutlineIcon, MenuDotIcon, NewChatOutlineIcon, NewsletterOutlineIcon, StatusUnreadIcon } from "../Icons/LeftTopNavigationIcons";
 import { useSelector, useDispatch } from "react-redux";
@@ -26,6 +18,14 @@ export default function LeftTopNavigation() {
         'Log out',
     ];
 
+    const buttonData = [
+        { id: "communityOutlineIcon", title: "Communities", icon: <CommunityOutlineIcon /> },
+        { id: "statusUnreadIcon", title: "Status", icon: <StatusUnreadIcon /> },
+        { id: "newsletterOutlineIcon", title: "Channels", icon: <NewsletterOutlineIcon /> },
+        { id: "newChatOutlineIcon", title: "New chat", icon: <NewChatOutlineIcon /> },
+        { id: "menuDotIcon", title: "Menu", icon: <MenuDotIcon /> },
+    ];
+
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -33,6 +33,11 @@ export default function LeftTopNavigation() {
     };
     const handleClose = () => {
         setAnchorEl(null);
+    };
+
+
+    const handleButtonClick = (buttonId) => {
+        dispatch(setLeftTopNavigationButtons({ "buttonName": buttonId, "buttonValue": true }));
     };
 
     return (
@@ -66,85 +71,26 @@ export default function LeftTopNavigation() {
                     alignItems="center"
                     spacing={1}
                 >
-                    <Tooltip title="Communities">
-                        <IconButton
-                            id="communityOutlineIcon"
-                            onClick={(e) => {
-                                dispatch(setLeftTopNavigationButtons({ "buttonName": e.currentTarget.id, "buttonValue": true }))
-                            }}
-                            sx={{
-                                borderRadius: "50%",
-                                // bgcolor: leftTopNavigationButtons.communityOutlineIcon ? "#374248" : "none",
-                                "&:hover": { bgcolor: "#374248" }
-                            }}
-                        >
-                            <CommunityOutlineIcon />
-                        </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Status">
-                        <IconButton
-                            id="statusUnreadIcon"
-                            onClick={(e) => {
-                                dispatch(setLeftTopNavigationButtons({ "buttonName": e.currentTarget.id, "buttonValue": true }))
-                            }}
-                            sx={{
-                                borderRadius: "50%",
-                                // bgcolor: leftTopNavigationButtons.statusUnreadIcon ? "#374248" : "none",
-                                "&:hover": { bgcolor: "#374248" }
-                            }}
-                        >
-                            <StatusUnreadIcon />
-                        </IconButton >
-                    </Tooltip>
-                    <Tooltip title="Channels">
-                        <IconButton
-                            id="newsletterOutlineIcon"
-                            onClick={(e) => {
-                                dispatch(setLeftTopNavigationButtons({ "buttonName": e.currentTarget.id, "buttonValue": true }))
-                            }}
-                            sx={{
-                                borderRadius: "50%",
-                                // bgcolor: leftTopNavigationButtons.newsletterOutlineIcon ? "#374248" : "none",
-                                "&:hover": { bgcolor: "#374248" }
-                            }}
-                        >
-                            <NewsletterOutlineIcon />
-                        </IconButton>
-                    </Tooltip>
-                    <Tooltip title="New chat">
-                        <IconButton
-                            id="newChatOutlineIcon"
-                            onClick={(e) => {
-                                dispatch(setLeftTopNavigationButtons({ "buttonName": e.currentTarget.id, "buttonValue": true }))
-                            }}
-                            sx={{
-                                borderRadius: "50%",
-                                // bgcolor: leftTopNavigationButtons.newChatOutlineIcon ? "#374248" : "none",
-                                "&:hover": { bgcolor: "#374248" }
-                            }}
-                        >
-                            <NewChatOutlineIcon />
-                        </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Menu">
-                        <IconButton
-                            id="menuDotIcon"
-                            onClick={(e) => {
-                                dispatch(setLeftTopNavigationButtons({ "buttonName": e.currentTarget.id, "buttonValue": true }))
-                                handleClick(e)
-                            }}
-                            aria-controls={open ? 'account-menu' : undefined}
-                            aria-haspopup="true"
-                            aria-expanded={open ? 'true' : undefined}
-                            sx={{
-                                borderRadius: "50%",
-                                bgcolor: anchorEl ? "#374248" : "none",
-                                "&:hover": { bgcolor: "#202c33" }
-                            }}
-                        >
-                            <MenuDotIcon />
-                        </IconButton>
-                    </Tooltip>
+                    {buttonData.map((button) => (
+                        <Tooltip key={button.id} title={button.title}>
+                            <IconButton
+                                id={button.id}
+                                onClick={(e) => {
+                                    handleButtonClick(button.id)
+                                    if (button.id === "menuDotIcon") {
+                                        handleClick(e)
+                                    }
+                                }}
+                                sx={{
+                                    borderRadius: "50%",
+                                    // bgcolor: leftTopNavigationButtons[button.id] ? "#374248" : "none",
+                                    "&:hover": { bgcolor: "#374248" },
+                                }}
+                            >
+                                {button.icon}
+                            </IconButton>
+                        </Tooltip>
+                    ))}
                     <Menu
                         anchorEl={anchorEl}
                         id="account-menu"
@@ -188,106 +134,6 @@ export default function LeftTopNavigation() {
                             Get WhatsApp for Windows
                         </MenuItem>
                     </Menu>
-                    {/* <Menu
-                        anchorEl={anchorEl}
-                        id="account-menu"
-                        open={open}
-                        onClose={handleClose}
-                        onClick={handleClose}
-                        PaperProps={{
-                            elevation: 0,
-                            sx: {
-                                color: "#d1d7db",
-                                bgcolor: "#233138",
-                            },
-                        }}
-                        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                    >
-                        <MenuItem
-                            onClick={handleClose}
-                            sx={{
-                                fontFamily: "inherit",
-                                padding: "9px 24px 9px",
-                                fontSize: "14.5px",
-                                '&:hover': { bgcolor: "#182229" }
-                            }}
-                        >
-                            New group
-                        </MenuItem>
-                        <MenuItem
-                            onClick={handleClose}
-                            sx={{
-                                fontFamily: "inherit",
-                                padding: "9px 24px 9px",
-                                fontSize: "14.5px",
-                                '&:hover': { bgcolor: "#182229" }
-                            }}
-                        >
-                            New community
-                        </MenuItem>
-                        <MenuItem
-                            onClick={handleClose}
-                            sx={{
-                                fontFamily: "inherit",
-                                padding: "9px 24px 9px",
-                                fontSize: "14.5px",
-                                '&:hover': { bgcolor: "#182229" }
-                            }}
-                        >
-                            Starred messages
-                        </MenuItem>
-                        <MenuItem
-                            onClick={handleClose}
-                            sx={{
-                                fontFamily: "inherit",
-                                padding: "9px 24px 9px",
-                                fontSize: "14.5px",
-                                '&:hover': { bgcolor: "#182229" }
-                            }}
-                        >
-                            Select chats
-                        </MenuItem>
-                        <MenuItem
-                            onClick={handleClose}
-                            sx={{
-                                fontFamily: "inherit",
-                                padding: "9px 24px 9px",
-                                fontSize: "14.5px",
-                                '&:hover': { bgcolor: "#182229" }
-                            }}
-                        >
-                            Settings
-                        </MenuItem>
-                        <MenuItem
-                            onClick={handleClose}
-                            sx={{
-                                fontFamily: "inherit",
-                                fontSize: "14.5px",
-                                padding: "9px 24px 9px",
-                                '&:hover': { bgcolor: "#182229" }
-                            }}
-                        >
-                            Log out
-                        </MenuItem>
-                        <Divider
-                            orientation="horizontal"
-                            sx={{
-                                bgcolor: "#262f34",
-                            }}
-                        />
-                        <MenuItem
-                            onClick={handleClose}
-                            sx={{
-                                fontFamily: "inherit",
-                                padding: "5px 24px 5px",
-                                fontSize: "14.5px",
-                                '&:hover': { bgcolor: "#182229" }
-                            }}
-                        >
-                            Get WhatsApp for Windows
-                        </MenuItem>
-                    </Menu> */}
                 </Stack>
             </Stack>
         </>

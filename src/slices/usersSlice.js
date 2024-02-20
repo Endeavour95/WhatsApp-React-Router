@@ -213,15 +213,15 @@ export const userSlice = createSlice({
             about: "I am not perfect but I am limited edition",
         },
         peoples: [
-            {
-                userName: "Gunjan",
-                profilePicture: "https://media-pnq1-2.cdn.whatsapp.net/v/t61.24694-24/421389557_372065352102660_7712977677576430661_n.jpg?ccb=11-4&oh=01_AdSuegxPK2e2ts-Ulvk5Tfqp2d82q0-TXu39kD8TzAL_Hw&oe=65E0BE59&_nc_sid=e6ed6c&_nc_cat=105",
-                countryCode: "+91",
-                userMobileNo: "93709 82838",
-                userAbout: "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन । मा कर्मफलहेतुर्भुर्मा ते संगोऽस्त्वकर्मणि ॥",
-                userLastSeen: "15:23",
-                userUnreadMessages: "8",
-            },
+            // {
+            //     userName: "Gunjan",
+            //     profilePicture: "https://media-pnq1-2.cdn.whatsapp.net/v/t61.24694-24/421389557_372065352102660_7712977677576430661_n.jpg?ccb=11-4&oh=01_AdSuegxPK2e2ts-Ulvk5Tfqp2d82q0-TXu39kD8TzAL_Hw&oe=65E0BE59&_nc_sid=e6ed6c&_nc_cat=105",
+            //     countryCode: "+91",
+            //     userMobileNo: "93709 82838",
+            //     userAbout: "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन । मा कर्मफलहेतुर्भुर्मा ते संगोऽस्त्वकर्मणि ॥",
+            //     userLastSeen: "15:23",
+            //     userUnreadMessages: "8",
+            // },
             // {
             //     userName: "Rameshwar Varpe",
             //     profilePicture: "",

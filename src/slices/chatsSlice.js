@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 
 export const chatsSlice = createSlice({
     name: 'chats',
@@ -97,13 +97,13 @@ export const chatsSlice = createSlice({
         },
         setChats: (state, action) => {
             state.chats.push(action.payload)
+            // console.log("updateState", state.chats)
         },
         setSearchText: (state, action) => {
             state.searchText = action.payload
         },
         updateMessageStatus: (state, action) => {
             let message = state.chats.find((chat) => chat.messageId === action.payload.messageId);
-
             if (message) {
                 message[action.payload.status] = action.payload.value;
             }

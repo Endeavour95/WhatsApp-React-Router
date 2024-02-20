@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Menu, MenuItem } from "@mui/material";
 import { setSelectedUser } from "../slices/usersSlice";
+import { openWhatsAppDesktop } from "../functions";
 
 export default function RightTopNavigation() {
     const peoples = useSelector((state) => state.peoples.peoples)
@@ -45,19 +46,12 @@ export default function RightTopNavigation() {
     };
 
     function VideoCallModal({ isOpen, onClose }) {
-        const openWhatsAppDesktop = () => {
-            const microsoftStoreLink =
-                'https://www.microsoft.com/store/productId/9NKSQGP7F2NH?ocid=pdpshare';
-
-            window.open(microsoftStoreLink, '_blank');
-        };
-
         return (
             <Dialog
                 open={isOpen}
                 onClose={(event, reason) => {
-                    onClose()
-                    if (reason === 'onBackdropClick') {
+                    // onClose()
+                    if (reason === 'backdropClick') {
                         onClose();
                     }
                 }}
@@ -110,7 +104,7 @@ export default function RightTopNavigation() {
                             </Typography>
                         </Stack>
                         <IconButton
-                            onClick={openWhatsAppDesktop}
+                            onClick={()=>dispatch(openWhatsAppDesktop())}
                             sx={{
                                 font: 'inherit',
                                 bgcolor: '#00a884',

@@ -1,14 +1,11 @@
-import { Grid, Box, Stack, Button, Input, TextField, IconButton, CircularProgress, Tooltip } from "@mui/material"
-import SvgIcon from '@mui/material/SvgIcon';
+import { Stack, Input, IconButton, CircularProgress, Tooltip } from "@mui/material"
 import SearchIcon, { BackIcon, XAltIcon } from "../Icons/SearchBarIcons";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setSearchText } from "../slices/chatsSlice";
 
 export default function LeftPannelSearchBar() {
     const searchText = useSelector((state) => state.chats.searchText)
-
-    const dispatch = useDispatch()
 
     const inputRef = useRef(null);
 
@@ -17,6 +14,8 @@ export default function LeftPannelSearchBar() {
     const [xaltIcon, setXaltIcon] = useState(false)
 
     const [circularProgress, setCircularProgress] = useState(false)
+
+    const dispatch = useDispatch()
 
     function handleCircularProgress() {
         setXaltIcon(false)
@@ -77,33 +76,33 @@ export default function LeftPannelSearchBar() {
                 }
             </Stack>
             {/* <Tooltip title="Search input textbox"> */}
-                <Input
-                    id="messageField"
-                    inputRef={inputRef}
+            <Input
+                id="messageField"
+                inputRef={inputRef}
 
-                    onClick={() => {
-                        setSearchIcon(false)
-                    }}
-                    onChange={(e) => {
-                        dispatch(setSearchText(e.currentTarget.value))
-                        handleCircularProgress()
-                    }}
-                    placeholder="Search or start a new chat"
-                    value={searchText}
-                    fullWidth
-                    disableUnderline
-                    sx={{
-                        bgcolor: "#202C33",
-                        height: "35px",
-                        font: "inherit",
-                        padding: "9px 0px 9px 12px",
-                        color: "#d1d7db",
-                        textIndent: "0px",
-                        textDecoration: "none",
-                        lineHeight: "inherit",
-                        fontSize: "15px",
-                    }}
-                />
+                onClick={() => {
+                    setSearchIcon(false)
+                }}
+                onChange={(e) => {
+                    dispatch(setSearchText(e.currentTarget.value))
+                    handleCircularProgress()
+                }}
+                placeholder="Search or start a new chat"
+                value={searchText}
+                fullWidth
+                disableUnderline
+                sx={{
+                    bgcolor: "#202C33",
+                    height: "35px",
+                    font: "inherit",
+                    padding: "9px 0px 9px 12px",
+                    color: "#d1d7db",
+                    textIndent: "0px",
+                    textDecoration: "none",
+                    lineHeight: "inherit",
+                    fontSize: "15px",
+                }}
+            />
             {/* </Tooltip> */}
             <Stack
                 direction="row"
