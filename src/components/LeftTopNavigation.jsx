@@ -1,12 +1,10 @@
 import { Stack, IconButton, Tooltip, Menu, MenuItem, Divider } from "@mui/material";
 import { useState } from "react";
 import DefaultUserIcon, { CommunityOutlineIcon, MenuDotIcon, NewChatOutlineIcon, NewsletterOutlineIcon, StatusUnreadIcon } from "../Icons/LeftTopNavigationIcons";
-import { useSelector, useDispatch } from "react-redux";
-import { setLeftTopNavigationButtons } from "../slices/buttonsSlice";
+import {useDispatch } from "react-redux";
+import { handleLeftTopNavigation } from "../functions";
 
 export default function LeftTopNavigation() {
-    const leftTopNavigationButtons = useSelector((state) => state.buttons.leftTopNavigationButtons)
-
     const dispatch = useDispatch()
 
     const menuItems = [
@@ -34,12 +32,7 @@ export default function LeftTopNavigation() {
     const handleClose = () => {
         setAnchorEl(null);
     };
-
-
-    const handleButtonClick = (buttonId) => {
-        dispatch(setLeftTopNavigationButtons({ "buttonName": buttonId, "buttonValue": true }));
-    };
-
+   
     return (
         <>
             <Stack
@@ -51,12 +44,10 @@ export default function LeftTopNavigation() {
                 <IconButton
                     id="personalProfileIcon"
                     onClick={(e) => {
-                        dispatch(setLeftTopNavigationButtons({ "buttonName": e.currentTarget.id, "buttonValue": true }))
+                        dispatch(handleLeftTopNavigation({ "buttonName": e.currentTarget.id, "buttonValue": true }))
                     }}
                     sx={{
                         padding: "0px",
-                        borderRadius: "50%",
-                        // bgcolor: leftTopNavigationButtons.personalProfileIcon ? "#374248" : "none",
                         "&:hover": { bgcolor: "#374248" }
                     }}
                 >
@@ -76,8 +67,9 @@ export default function LeftTopNavigation() {
                             <IconButton
                                 id={button.id}
                                 onClick={(e) => {
-                                    handleButtonClick(button.id)
-                                    if (button.id === "menuDotIcon") {
+                                    dispatch(handleLeftTopNavigation({ "buttonName": e.currentTarget.id, "buttonValue": true }));
+
+                                    if (e.currentTarget.id === "menuDotIcon") {
                                         handleClick(e)
                                     }
                                 }}

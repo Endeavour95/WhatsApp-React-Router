@@ -4,6 +4,7 @@ import SmileyIcon, { AttachMenuPlusIcon, SendIcon, VoiceCommandIcon } from "../I
 import DocumentIcon, { PhotoVideoIcon, CameraIconAdvanced, ContactIcon, PollIcon, NewStickerIcon } from "../Icons/AttachmentModalIcons";
 import { useSelector, useDispatch } from "react-redux";
 import { setChats, updateMessageStatus } from "../slices/chatsSlice";
+import { generateMessage } from "../functions";
 
 export default function RightBottomBar(props) {
     const chats = useSelector((state) => state.chats.chats)
@@ -31,20 +32,21 @@ export default function RightBottomBar(props) {
     }, [selectedUser])
 
 
-    useEffect(() => {
-        const lastChat = chats[chats.length - 1]
-        if (Object.hasOwn(lastChat, "deliveredStatus")) {
-            setTimeout(() => {
-                dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "deliveredStatus", value: true }))
-            }, 2000);
-            setTimeout(() => {
-                dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "readStatus", value: true }))
-            }, 5000);
-            setTimeout(() => {
-                setUpdateState(generateReplyMessage())
-            }, 10000);
-        }
-    }, [updateState])
+
+    // useEffect(() => {
+    //     const lastChat = chats[chats.length - 1]
+    //     if (Object.hasOwn(lastChat, "deliveredStatus")) {
+    //         setTimeout(() => {
+    //             dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "deliveredStatus", value: true }))
+    //         }, 2000);
+    //         setTimeout(() => {
+    //             dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "readStatus", value: true }))
+    //         }, 5000);
+    //         setTimeout(() => {
+    //             setUpdateState(generateReplyMessage())
+    //         }, 10000);
+    //     }
+    // }, [updateState])
 
     // useEffect(() => {
     //     const lastChat = chats[chats.length - 1]
@@ -63,39 +65,55 @@ export default function RightBottomBar(props) {
     //     }
     // }, [chats])
 
-    function generateMessage() {
-        dispatch(setChats({
-            "messageId": chats.length < 1 ? 1 : Number(chats[chats.length - 1].messageId) + 1,
-            "messageText": textToSend,
-            "messageTime": new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
-            "messageDate": new Date().toLocaleDateString([], {
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric',
-            }),
-            "userMobileNo": selectedUser.userMobileNo,
-            "deliveredStatus": false,
-            "readStatus": false,
-        }))
-        setTextToReceive(textToSend)
-        setTextToSend("")
-    }
+    // function generateMessage(text) {
+    //     dispatch(setChats({
+    //         "messageId": chats.length < 1 ? 1 : Number(chats[chats.length - 1].messageId) + 1,
+    //         "messageText": text,
+    //         "messageTime": new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+    //         "messageDate": new Date().toLocaleDateString([], {
+    //             year: 'numeric',
+    //             month: 'numeric',
+    //             day: 'numeric',
+    //         }),
+    //         "userMobileNo": selectedUser.userMobileNo,
+    //         "deliveredStatus": false,
+    //         "readStatus": false,
+    //     }))
+    //     // setTextToReceive(textToSend)
+    //     // setTextToSend("")
+    //     stateUpdated(text)
+    // }
 
-    function generateReplyMessage() {
-        dispatch(setChats({
-            "messageId": chats.length < 1 ? 1 : Number(chats[chats.length - 1].messageId) + 1,
-            "messageText": textToReceive + " reply Message",
-            "messageTime": new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
-            "messageDate": new Date().toLocaleDateString([], {
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric',
-            }),
-            "userMobileNo": selectedUser.userMobileNo,
-        }))
-        setTextToReceive("")
-        return false
-    }
+    // function stateUpdated(text) {
+    //     const lastChat = chats[chats.length - 1]
+    //     if (Object.hasOwn(lastChat, "deliveredStatus")) {
+    //         setTimeout(() => {
+    //             dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "deliveredStatus", value: true }))
+    //         }, 2000);
+    //         setTimeout(() => {
+    //             dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "readStatus", value: true }))
+    //         }, 5000);
+    //         setTimeout(() => {
+    //             setUpdateState(generateReplyMessage(text))
+    //         }, 10000);
+    //     }
+    // }
+
+    // function generateReplyMessage(text) {
+    //     dispatch(setChats({
+    //         "messageId": chats.length < 1 ? 1 : Number(chats[chats.length - 1].messageId) + 1,
+    //         "messageText": text + " reply Message",
+    //         "messageTime": new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
+    //         "messageDate": new Date().toLocaleDateString([], {
+    //             year: 'numeric',
+    //             month: 'numeric',
+    //             day: 'numeric',
+    //         }),
+    //         "userMobileNo": selectedUser.userMobileNo,
+    //     }))
+    //     // setTextToReceive("")
+    //     return false
+    // }
 
     const handleRotateClick = () => {
         const newRotation = rotation === 0 ? 135 : 0;
@@ -162,8 +180,10 @@ export default function RightBottomBar(props) {
                         onKeyUp={(e) => {
                             if (e.key === "Enter") {
                                 if (textToSend) {
-                                    generateMessage()
-                                    setUpdateState(true)
+                                    generateMessage(textToSend)
+                                    setTextToSend("")
+
+                                    // setUpdateState(true)
                                 }
                             }
                         }}
@@ -192,8 +212,10 @@ export default function RightBottomBar(props) {
                         textToSend ?
                             <SendIcon
                                 onClick={() => {
-                                    generateMessage()
-                                    setUpdateState(true)
+                                    generateMessage(textToSend)
+                                    setTextToSend("")
+
+                                    // setUpdateState(true)
                                 }}
                             />
                             :

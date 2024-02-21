@@ -2,7 +2,7 @@ import { Typography, Grid, Stack, IconButton, Avatar } from "@mui/material";
 import { BackIcon } from "../Icons/SearchBarIcons";
 import DefaultUserIcon, { CameraIcon, PencilIcon } from "../Icons/LeftTopNavigationIcons";
 import { useSelector, useDispatch } from "react-redux";
-import { setButtonLeftTopNavigation } from "../slices/buttonsSlice";
+import { handlePersonalProfileInfoDrawer } from "../functions";
 
 export default function PersonalProfileInfoDrawer() {
     const personalInfo = useSelector((state) => state.peoples.personalInfo)
@@ -51,7 +51,7 @@ export default function PersonalProfileInfoDrawer() {
                                 '&:hover': { cursor: "pointer" },
                             }}
                             onClick={(e) => {
-                                dispatch(setButtonLeftTopNavigation({"buttonName": e.currentTarget.id, "buttonValue": false}))
+                                dispatch(handlePersonalProfileInfoDrawer({ "buttonName": e.currentTarget.id, "buttonValue": false }))
                             }}
                         >
                             <BackIcon colour="#d9dee0" />
@@ -129,9 +129,7 @@ export default function PersonalProfileInfoDrawer() {
                     alignItems="stretch"
                 >
                     <Typography sx={{ font: "inherit", color: "#d1d7db", fontSize: "16px" }}>{personalInfo.name}</Typography>
-                    <IconButton sx={{ color: "#8696a0", padding: "0px" }}>
-                        <PencilIcon />
-                    </IconButton>
+                    <PencilIcon colour="#8696a0" />
                 </Stack>
             </Stack>
             <Stack
@@ -179,9 +177,7 @@ export default function PersonalProfileInfoDrawer() {
                         color: "#d1d7db",
                         fontSize: "16px",
                     }}>{personalInfo.about}</Typography>
-                    <IconButton sx={{ color: "#8696a0", padding: "0px" }}>
-                        <PencilIcon />
-                    </IconButton>
+                    <PencilIcon colour="#8696a0" />
                 </Stack>
             </Stack>
         </>

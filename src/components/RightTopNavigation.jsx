@@ -251,11 +251,6 @@ export default function RightTopNavigation() {
                             <SearchIcon colour="#aebac1" height={30} width={30} />
                         </IconButton>
                     </Tooltip>
-                    {/* <Tooltip title="Menu">
-                        <IconButton>
-                            <MenuDotIcon />
-                        </IconButton>
-                    </Tooltip> */}
                     <Tooltip title="Menu">
                         <IconButton
                             id="menuDotIcon"

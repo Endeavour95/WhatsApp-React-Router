@@ -1,19 +1,19 @@
-import { Stack, Input, IconButton, CircularProgress, Tooltip } from "@mui/material"
+import { Stack, Input, CircularProgress, Tooltip } from "@mui/material"
 import SearchIcon, { BackIcon, XAltIcon } from "../Icons/SearchBarIcons";
 import { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setSearchText } from "../slices/chatsSlice";
+import { handleLeftPannelSearchBar } from "../functions";
 
 export default function LeftPannelSearchBar() {
     const searchText = useSelector((state) => state.chats.searchText)
-
-    const inputRef = useRef(null);
 
     const [searchIcon, setSearchIcon] = useState(true)
 
     const [xaltIcon, setXaltIcon] = useState(false)
 
     const [circularProgress, setCircularProgress] = useState(false)
+
+    const inputRef = useRef(null);
 
     const dispatch = useDispatch()
 
@@ -29,77 +29,53 @@ export default function LeftPannelSearchBar() {
 
     return (
         <>
-            <Stack
-                direction="row"
-                sx={{
-                    height: "35px",
-                    bgcolor: "#202C33",
-                    borderTopLeftRadius: "8px",
-                    borderBottomLeftRadius: "8px",
-                }}
-            >
-                {
-                    searchIcon ? (
-                        <IconButton
-                            sx={{
-                                paddingLeft: "12px",
-                                paddingRight: "17px",
-                            }}
-                            id="searchIcon"
-                            onClick={(e) => {
-                                setSearchIcon(false)
-                                inputRef.current.focus();
-                            }}
-                        >
-                            <SearchIcon
-                                colour="#8696a0" height={24} width={24}
-                            />
-                        </IconButton>
-                    ) : (
-                        <IconButton
-                            sx={{
-                                paddingLeft: "12px",
-                                paddingRight: "17px",
-                            }}
-                            id="backIcon"
-                            onClick={(e) => {
-                                setSearchIcon(true)
-                                setXaltIcon(false)
-                                dispatch(setSearchText(""))
-                            }}
-                        >
-                            <BackIcon
-                                colour="#00a884"
-                            />
-                        </IconButton>
-                    )
-                }
-            </Stack>
+            {
+                searchIcon ? (
+                    <SearchIcon
+                        id="searchIcon"
+                        colour="#8696a0" height={24} width={24}
+                        sx={{
+                            padding: "5.5px 29px 5.5px 12px"
+                        }}
+                        onClick={(e) => {
+                            setSearchIcon(false)
+                            inputRef.current.focus();
+                        }}
+                    />
+                ) : (
+                    <BackIcon
+                        id="backIcon"
+                        colour="#00a884"
+                        sx={{
+                            padding: "5.5px 29px 5.5px 12px"
+                        }}
+                        onClick={(e) => {
+                            setSearchIcon(true)
+                            setXaltIcon(false)
+                            dispatch(handleLeftPannelSearchBar(""))
+                        }}
+                    />
+                )
+            }
             {/* <Tooltip title="Search input textbox"> */}
             <Input
                 id="messageField"
                 inputRef={inputRef}
-
                 onClick={() => {
                     setSearchIcon(false)
                 }}
                 onChange={(e) => {
-                    dispatch(setSearchText(e.currentTarget.value))
+                    dispatch(handleLeftPannelSearchBar(e.currentTarget.value))
                     handleCircularProgress()
                 }}
                 placeholder="Search or start a new chat"
                 value={searchText}
-                fullWidth
                 disableUnderline
                 sx={{
-                    bgcolor: "#202C33",
-                    height: "35px",
-                    font: "inherit",
-                    padding: "9px 0px 9px 12px",
+                    width: "100%",
+                    fontFamily: "inherit",
+                    padding: "2.44px 0px 2px",
                     color: "#d1d7db",
-                    textIndent: "0px",
-                    textDecoration: "none",
-                    lineHeight: "inherit",
                     fontSize: "15px",
                 }}
             />
@@ -107,59 +83,28 @@ export default function LeftPannelSearchBar() {
             <Stack
                 direction="row"
                 sx={{
-                    height: "35px",
-                    bgcolor: "#202C33",
-                    borderTopRightRadius: "8px",
-                    borderBottomRightRadius: "8px",
+                    padding: "5.5px 6px 5.5px 1px"
                 }}
             >
-                {
-                    (xaltIcon === false && circularProgress === false) || searchText === "" ? (
-                        <IconButton
-                            sx={{
-                                paddingLeft: "0px",
-                            }}
-                        >
-                            <></>
-                        </IconButton>
-                    ) : xaltIcon ? (
-                        <IconButton
-                            sx={{
-                                paddingLeft: "0px",
-                            }}
-                            onClick={(e) => {
-                                dispatch(setSearchText(''))
-                            }}
-                        >
-                            <XAltIcon
-                                colour="#8696a0"
-                            />
-                        </IconButton>
-                    ) : circularProgress ? (
-                        <IconButton
-                            sx={{
-                                paddingLeft: "0px",
-                            }}
-                        >
-                            <CircularProgress
-                                variant="indeterminate"
-                                thickness={5}
-                                size={20}
-                                sx={{
-                                    color: "#00a884",
-                                }}
-                            />
-                        </IconButton>
-                    ) : (
-                        <IconButton
-                            sx={{
-                                paddingLeft: "0px",
-                            }}
-                        >
-                            <></>
-                        </IconButton>
-                    )
-                }
+                {!((xaltIcon || circularProgress) && searchText !== "") ? (
+                    <></>
+                ) : xaltIcon ? (
+                    <XAltIcon
+                        colour="#8696a0"
+                        onClick={() => {
+                            dispatch(handleLeftPannelSearchBar(""))
+                        }}
+                    />
+                ) : (
+                    <CircularProgress
+                        variant="indeterminate"
+                        thickness={5}
+                        size={20}
+                        sx={{
+                            color: "#00a884",
+                        }}
+                    />
+                )}
             </Stack>
         </>
     )

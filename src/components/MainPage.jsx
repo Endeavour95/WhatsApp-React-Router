@@ -15,25 +15,25 @@ export default function MainPage() {
 
     const dispatch = useDispatch();
 
-    const fetchChats = createAsyncThunk('chats/fetchChats', async () => {
-        try {
-            const response = await axios.get('https://b75f741106774e1ba768db869459ed2b.api.mockbin.io/');
-            return response.data;
-        } catch (error) {
-            throw error;
-        }
-    });
+    // const fetchChats = createAsyncThunk('chats/fetchChats', async () => {
+    //     try {
+    //         const response = await axios.get('https://b75f741106774e1ba768db869459ed2b.api.mockbin.io/');
+    //         return response.data;
+    //     } catch (error) {
+    //         throw error;
+    //     }
+    // });
 
-    useEffect(() => {
-        dispatch(fetchChats())
-            .then((data) => {
-                dispatch(setPeoples(data.payload.peoples))
-                dispatch(setNewChats(data.payload.chats))
-            })
-            .catch((error) => {
-                console.error('Error fetching data:', error);
-            });
-    }, []);
+    // useEffect(() => {
+    //     dispatch(fetchChats())
+    //         .then((data) => {
+    //             dispatch(setPeoples(data.payload.peoples))
+    //             dispatch(setNewChats(data.payload.chats))
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error fetching data:', error);
+    //         });
+    // }, []);
 
     // useEffect(() => {
     //     dispatch(fetchChats());

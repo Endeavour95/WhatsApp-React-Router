@@ -5,6 +5,7 @@ import PersonalProfileInfoDrawer from "./PersonalProfileInfoDrawer";
 import LeftPannelBelowSearchBarButtons from "./LeftPannelBelowSearchBarButtons";
 import LeftUsersList from "./LeftUsersList";
 import { useSelector } from "react-redux";
+import { Box } from "@mui/material";
 
 export default function Left(props) {
     const leftTopNavigationButtons = useSelector((state) => state.buttons.leftTopNavigationButtons)
@@ -37,8 +38,7 @@ export default function Left(props) {
                                 >
                                     <LeftTopNavigation />
                                 </Grid>
-                                <Stack
-                                    direction="row"
+                                <Box
                                     sx={{
                                         boxSizing: "border-box",
                                         alignItems: "center",
@@ -46,8 +46,17 @@ export default function Left(props) {
                                         width: "100%",
                                     }}
                                 >
-                                    <LeftPannelSearchBar />
-                                </Stack>
+                                    <Stack
+                                        direction="row"
+                                        sx={{
+                                            bgcolor: "#202C33",
+                                            borderRadius:"8px"
+
+                                        }}
+                                    >
+                                        <LeftPannelSearchBar />
+                                    </Stack>
+                                </Box>
                                 <LeftPannelBelowSearchBarButtons />
                                 <LeftUsersList />
                             </Stack>

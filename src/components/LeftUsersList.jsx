@@ -1,57 +1,19 @@
 import { Avatar, IconButton, ListItem, Stack, List, Typography, Divider, Paper } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import DefaultUserIcon, { DownArrowIcon } from "../Icons/LeftTopNavigationIcons";
 import { useSelector, useDispatch } from "react-redux";
-import { setUnreadMessages, setSelectedUser } from "../slices/usersSlice";
 import { Menu, MenuItem } from "@mui/material";
+import { handleLeftUsersList } from "../functions";
 
-function getPeoples(peoples, text, belowSearchBarButtons) {
-
-    let peoplesList = [...peoples]
-
-    if (Object.values(belowSearchBarButtons).includes(true)) {
-        const selectedButton = Object.keys(belowSearchBarButtons).find(
-            (button) => belowSearchBarButtons[button]
-        );
-
-        switch (selectedButton) {
-            case 'buttonAll':
-                break;
-            case 'buttonUnread':
-                peoplesList = peoplesList.filter((user) => user.userUnreadMessages);
-                break;
-            case 'buttonContacts':
-                peoplesList.sort((a, b) => a.userMobileNo.localeCompare(b.userMobileNo));
-                break;
-            case 'buttonGroups':
-                break;
-            default:
-                break;
-        }
-    }
-
-    if (text) {
-        peoplesList = peoplesList.filter((user) =>
-            user.userName.toLowerCase().includes(text.toLowerCase())
-        );
-    }
-
-    return peoplesList
-}
-
-function truncateText(text) {
-    const newText = text.length > 35 ? `${text.substring(0, 35)}...` : text;
-    return newText
-}
 
 export default function LeftUsersList(props) {
-    const chats = useSelector((state) => state.chats.chats)
-
-    const searchText = useSelector((state) => state.chats.searchText)
-
     const peoples = useSelector((state) => state.peoples.peoples)
 
     const selectedUser = useSelector((state) => state.peoples.selectedUser)
+
+    const chats = useSelector((state) => state.chats.chats)
+
+    const searchText = useSelector((state) => state.chats.searchText)
 
     const leftBelowSearchBarButtons = useSelector((state) => state.buttons.leftBelowSearchBarButtons)
 
@@ -59,27 +21,7 @@ export default function LeftUsersList(props) {
 
     const [dropdownIconIndex, setDropdownIconIndex] = useState(null);
 
-    useEffect(() => {
-        dispatch(setUnreadMessages(selectedUser.userMobileNo))
-    }, [selectedUser])
-
     let peoplesList = getPeoples(peoples, searchText, leftBelowSearchBarButtons)
-
-    function getLastMessageText(userMobileNo) {
-        if (chats.length > 0) {
-            const filteredChats = chats.filter(chat => chat.userMobileNo === userMobileNo);
-
-            if (filteredChats.length > 0) {
-                const sortedChats = filteredChats.sort((a, b) => b.messageId - a.messageId);
-
-                const lastMessageText = sortedChats[0].messageText;
-
-                return lastMessageText;
-            }
-        }
-
-        return null;
-    }
 
     const menuItems = [
         'Archive chat',
@@ -96,13 +38,7 @@ export default function LeftUsersList(props) {
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
-        if (selectedUser.userMobileNo) {
-            // setSelectedUser({})
-            setAnchorEl(null);
-        } else {
-            // setSelectedUser({})
-            setAnchorEl(null);
-        }
+        setAnchorEl(null);
     };
 
     const [clientXposition, setClientXposition] = useState(null)
@@ -126,9 +62,8 @@ export default function LeftUsersList(props) {
                 '&::-webkit-scrollbar-track': {
                     backgroundColor: '#111b21',
                 },
-
             }}> {
-                peoplesList.length < 1 ? (
+                    peoplesList.length < 1 ? (
                         <>
                             <Typography
                                 sx={{
@@ -160,12 +95,12 @@ export default function LeftUsersList(props) {
                                         return (
                                             <>
                                                 <ListItem
-                                                    key={user.userName}
+                                                    key={user.userMobileNo}
                                                     onClick={(e) => {
                                                         if (open) {
                                                             e.stopPropagation()
                                                         } else {
-                                                            dispatch(setSelectedUser(user))
+                                                            dispatch(handleLeftUsersList(user))
                                                         }
                                                     }}
                                                     onMouseEnter={() => setDropdownIconIndex(index)}
@@ -222,11 +157,11 @@ export default function LeftUsersList(props) {
                                                             }}
                                                         >
                                                             {
-                                                                getLastMessageText(user.userMobileNo) === null ?
+                                                                getLastMessageText(user.userMobileNo, chats) === null ?
                                                                     truncateText(user.userAbout)
                                                                     // user.userAbout
                                                                     :
-                                                                    truncateText(getLastMessageText(user.userMobileNo))
+                                                                    truncateText(getLastMessageText(user.userMobileNo, chats))
                                                                 // getLastMessageText(user.userMobileNo)
 
                                                             }
@@ -332,6 +267,7 @@ export default function LeftUsersList(props) {
                                                     </Stack>
                                                 </ListItem >
                                                 <Divider
+                                                    key={(Number(user.userMobileNo) + index) + user.userName}
                                                     variant="inset"
                                                     orientation="horizontal"
                                                     sx={{
@@ -349,4 +285,59 @@ export default function LeftUsersList(props) {
             </Paper>
         </>
     )
+}
+
+function getPeoples(peoples, text, belowSearchBarButtons) {
+
+    let peoplesList = [...peoples]
+
+    if (Object.values(belowSearchBarButtons).includes(true)) {
+        const selectedButton = Object.keys(belowSearchBarButtons).find(
+            (button) => belowSearchBarButtons[button]
+        );
+
+        switch (selectedButton) {
+            case 'buttonAll':
+                break;
+            case 'buttonUnread':
+                peoplesList = peoplesList.filter((user) => user.userUnreadMessages);
+                break;
+            case 'buttonContacts':
+                peoplesList.sort((a, b) => a.userMobileNo.localeCompare(b.userMobileNo));
+                break;
+            case 'buttonGroups':
+                break;
+            default:
+                break;
+        }
+    }
+
+    if (text) {
+        peoplesList = peoplesList.filter((user) =>
+            user.userName.toLowerCase().includes(text.toLowerCase())
+        );
+    }
+
+    return peoplesList
+}
+
+function truncateText(text) {
+    const newText = text.length > 35 ? `${text.substring(0, 35)}...` : text;
+    return newText
+}
+
+function getLastMessageText(userMobileNo, chats) {
+    if (chats.length > 0) {
+        const filteredChats = chats.filter(chat => chat.userMobileNo === userMobileNo);
+
+        if (filteredChats.length > 0) {
+            const sortedChats = filteredChats.sort((a, b) => b.messageId - a.messageId);
+
+            const lastMessageText = sortedChats[0].messageText;
+
+            return lastMessageText;
+        }
+    }
+
+    return null;
 }
