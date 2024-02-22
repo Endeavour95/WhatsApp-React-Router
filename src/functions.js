@@ -1,3 +1,4 @@
+import moment from "moment";
 import { setButtonLeftTopNavigation, setLeftBelowSearchBarButtons, setLeftTopNavigationButtons } from "./slices/buttonsSlice";
 import { setChats, setSearchText, updateMessageStatus } from "./slices/chatsSlice";
 import { setSelectedUser, setUnreadMessages } from "./slices/usersSlice";
@@ -40,23 +41,20 @@ export const handlePersonalProfileInfoDrawer = (obj) => {
     }
 }
 
-
 export const generateMessage = (text) => {
     return (dispatch, getState) => {
-        const data = getState
-        console.log("sdfsdfsafdasdfsd", data)
-        const chats = data.chats.chats
-        const selectedUser = data.peoples.selectedUser
+        const chats = getState().chats.chats
+        const selectedUser = getState().peoples.selectedUser
         dispatch(setChats({
             "messageId": chats.length < 1 ? 1 : Number(chats[chats.length - 1].messageId) + 1,
             "messageText": text,
-            "messageTime": new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
-            "messageDate": new Date().toLocaleDateString([], { year: 'numeric', month: 'numeric', day: 'numeric', }),
+            "messageTime": moment().format('HH:mm'),
+            "messageDate": moment().format('YYYY-MM-DD'),
             "userMobileNo": selectedUser.userMobileNo,
             "deliveredStatus": false,
             "readStatus": false,
         }))
-        stateUpdated(text)
+        dispatch(stateUpdated(text))
     }
 }
 
@@ -65,6 +63,7 @@ function stateUpdated(text) {
         const chats = getState().chats.chats
         const selectedUser = getState().peoples.selectedUser
         const lastChat = chats[chats.length - 1]
+        console.log("text", text)
         if (Object.hasOwn(lastChat, "deliveredStatus")) {
             setTimeout(() => {
                 dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "deliveredStatus", value: true }))
@@ -73,7 +72,7 @@ function stateUpdated(text) {
                 dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "readStatus", value: true }))
             }, 5000);
             setTimeout(() => {
-                generateReplyMessage(text)
+                dispatch(generateReplyMessage(text))
             }, 10000);
         }
     }
@@ -86,8 +85,8 @@ function generateReplyMessage(text) {
         dispatch(setChats({
             "messageId": chats.length < 1 ? 1 : Number(chats[chats.length - 1].messageId) + 1,
             "messageText": text + " reply Message",
-            "messageTime": new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
-            "messageDate": new Date().toLocaleDateString([], { year: 'numeric', month: 'numeric', day: 'numeric', }),
+            "messageTime": moment().format('HH:mm'),
+            "messageDate": moment().format('YYYY-MM-DD'),
             "userMobileNo": selectedUser.userMobileNo,
         }))
     }

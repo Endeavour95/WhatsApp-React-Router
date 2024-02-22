@@ -323,6 +323,7 @@ export const userSlice = createSlice({
             },
         ],
         selectedUser: {},
+        selectedUserMobileNo : "",
     },
     reducers: {
         setPeoples: (state, action) => {
@@ -337,6 +338,9 @@ export const userSlice = createSlice({
         },
         setSelectedUser: (state, action) => {
             state.selectedUser = action.payload
+        },
+        selectedUserMobileNo : (state, action) => {
+            state.selectedUserMobileNo = action.payload
         }
     },
     // extraReducers: (builder) => {

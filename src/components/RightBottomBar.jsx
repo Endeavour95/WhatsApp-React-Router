@@ -1,25 +1,18 @@
-import { Grid, IconButton, Box, Input, Stack, List, ListItem, Dialog, Paper, Typography, Button, TextField, Tooltip } from "@mui/material";
+import { IconButton, Input, Stack, List, ListItem, Dialog, Paper, Typography, Tooltip } from "@mui/material";
 import { useState, useEffect, useRef } from "react";
 import SmileyIcon, { AttachMenuPlusIcon, SendIcon, VoiceCommandIcon } from "../Icons/RightBottomBarIcons";
 import DocumentIcon, { PhotoVideoIcon, CameraIconAdvanced, ContactIcon, PollIcon, NewStickerIcon } from "../Icons/AttachmentModalIcons";
 import { useSelector, useDispatch } from "react-redux";
-import { setChats, updateMessageStatus } from "../slices/chatsSlice";
 import { generateMessage } from "../functions";
 
-export default function RightBottomBar(props) {
-    const chats = useSelector((state) => state.chats.chats)
-
+export default function RightBottomBar() {
     const selectedUser = useSelector((state) => state.peoples.selectedUser)
 
     const [textToSend, setTextToSend] = useState("")
 
-    const [textToReceive, setTextToReceive] = useState("")
-
-    const [rotation, setRotation] = useState(0);
+    const rotation = useRef(0);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const [updateState, setUpdateState] = useState(false)
 
     const inputRef = useRef(null)
 
@@ -31,93 +24,9 @@ export default function RightBottomBar(props) {
         }
     }, [selectedUser])
 
-
-
-    // useEffect(() => {
-    //     const lastChat = chats[chats.length - 1]
-    //     if (Object.hasOwn(lastChat, "deliveredStatus")) {
-    //         setTimeout(() => {
-    //             dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "deliveredStatus", value: true }))
-    //         }, 2000);
-    //         setTimeout(() => {
-    //             dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "readStatus", value: true }))
-    //         }, 5000);
-    //         setTimeout(() => {
-    //             setUpdateState(generateReplyMessage())
-    //         }, 10000);
-    //     }
-    // }, [updateState])
-
-    // useEffect(() => {
-    //     const lastChat = chats[chats.length - 1]
-    //     if (Object.keys(lastChat).includes("deliveredStatus")) {
-
-    //     // if (Object.hasOwn(lastChat, "deliveredStatus")) {
-    //         setTimeout(() => {
-    //             dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "deliveredStatus", value: true }))
-    //         }, 2000);
-    //         setTimeout(() => {
-    //             dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "readStatus", value: true }))
-    //         }, 5000);
-    //         setTimeout(() => {
-    //             generateReplyMessage()
-    //         }, 10000);
-    //     }
-    // }, [chats])
-
-    // function generateMessage(text) {
-    //     dispatch(setChats({
-    //         "messageId": chats.length < 1 ? 1 : Number(chats[chats.length - 1].messageId) + 1,
-    //         "messageText": text,
-    //         "messageTime": new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
-    //         "messageDate": new Date().toLocaleDateString([], {
-    //             year: 'numeric',
-    //             month: 'numeric',
-    //             day: 'numeric',
-    //         }),
-    //         "userMobileNo": selectedUser.userMobileNo,
-    //         "deliveredStatus": false,
-    //         "readStatus": false,
-    //     }))
-    //     // setTextToReceive(textToSend)
-    //     // setTextToSend("")
-    //     stateUpdated(text)
-    // }
-
-    // function stateUpdated(text) {
-    //     const lastChat = chats[chats.length - 1]
-    //     if (Object.hasOwn(lastChat, "deliveredStatus")) {
-    //         setTimeout(() => {
-    //             dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "deliveredStatus", value: true }))
-    //         }, 2000);
-    //         setTimeout(() => {
-    //             dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "readStatus", value: true }))
-    //         }, 5000);
-    //         setTimeout(() => {
-    //             setUpdateState(generateReplyMessage(text))
-    //         }, 10000);
-    //     }
-    // }
-
-    // function generateReplyMessage(text) {
-    //     dispatch(setChats({
-    //         "messageId": chats.length < 1 ? 1 : Number(chats[chats.length - 1].messageId) + 1,
-    //         "messageText": text + " reply Message",
-    //         "messageTime": new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
-    //         "messageDate": new Date().toLocaleDateString([], {
-    //             year: 'numeric',
-    //             month: 'numeric',
-    //             day: 'numeric',
-    //         }),
-    //         "userMobileNo": selectedUser.userMobileNo,
-    //     }))
-    //     // setTextToReceive("")
-    //     return false
-    // }
-
     const handleRotateClick = () => {
-        const newRotation = rotation === 0 ? 135 : 0;
-        setRotation(newRotation);
+        const newRotation = rotation.current === 0 ? 135 : 0;
+        rotation.current = newRotation
     };
 
     const handleOpenModal = () => {
@@ -153,24 +62,23 @@ export default function RightBottomBar(props) {
                     alignItems="center"
                     width={"100%"}
                 >
-                    <IconButton>
-                        <SmileyIcon />
-                    </IconButton>
+                    <SmileyIcon
+                        sx={{
+                            padding: "8px"
+                        }}
+                    />
                     <Tooltip title="Attach">
-                        <IconButton
+                        <AttachMenuPlusIcon
                             onClick={() => { handleOpenModal() }}
                             sx={{
+                                transform: `rotate(${rotation.current}deg)`,
+                                transition: 'transform 0.4s ease',
+                                padding: "8px",
                                 borderRadius: "50%",
-                                bgcolor: rotation == 135 ? "#374248" : "#202c33"
+                                bgcolor: rotation.current == 135 ? "#374248" : "#202c33"
+
                             }}
-                        >
-                            <AttachMenuPlusIcon
-                                sx={{
-                                    transform: `rotate(${rotation}deg)`,
-                                    transition: 'transform 0.4s ease',
-                                }}
-                            />
-                        </IconButton>
+                        />
                     </Tooltip>
                     {/* <Tooltip title="Type a message"> */}
                     <Input
@@ -180,10 +88,8 @@ export default function RightBottomBar(props) {
                         onKeyUp={(e) => {
                             if (e.key === "Enter") {
                                 if (textToSend) {
-                                    generateMessage(textToSend)
+                                    dispatch(generateMessage(textToSend))
                                     setTextToSend("")
-
-                                    // setUpdateState(true)
                                 }
                             }
                         }}
@@ -207,21 +113,24 @@ export default function RightBottomBar(props) {
                     />
                     {/* </Tooltip> */}
                 </Stack>
-                <IconButton>
-                    {
-                        textToSend ?
-                            <SendIcon
-                                onClick={() => {
-                                    generateMessage(textToSend)
-                                    setTextToSend("")
-
-                                    // setUpdateState(true)
-                                }}
-                            />
-                            :
-                            <VoiceCommandIcon />
-                    }
-                </IconButton>
+                {
+                    textToSend ?
+                        <SendIcon
+                            onClick={() => {
+                                dispatch(generateMessage(textToSend))
+                                setTextToSend("")
+                            }}
+                            sx={{
+                                padding: "8px"
+                            }}
+                        />
+                        :
+                        <VoiceCommandIcon
+                            sx={{
+                                padding: "8px"
+                            }}
+                        />
+                }
             </Stack>
         </>
     )
@@ -242,7 +151,6 @@ function AttachmentModal({ isOpen, onClose }) {
         <Dialog
             open={isOpen}
             onClose={(event, reason) => {
-                // onClose();
                 if (reason === 'backdropClick') {
                     onClose()
                 }

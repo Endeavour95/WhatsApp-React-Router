@@ -27,10 +27,11 @@ export default function LeftPannelBelowSearchBarButtons() {
       >
         {buttonData.map((button) => (
           <IconButton
+            data-testid={button.id}
             key={button.id}
             id={button.id}
             onClick={(e) => {
-              dispatch(handleLeftPannelBelowSearchBarButtons({buttonName: e.currentTarget.id, buttonValue: true}))
+              dispatch(handleLeftPannelBelowSearchBarButtons({ buttonName: e.currentTarget.id, buttonValue: true }))
             }}
             sx={{
               padding: "6px 12px",
@@ -40,7 +41,7 @@ export default function LeftPannelBelowSearchBarButtons() {
               fontWeight: "400",
               fontFamily: "inherit",
               cursor: "pointer",
-              borderRadius:"42px",
+              borderRadius: "42px",
               '&:hover': {
                 bgcolor: leftBelowSearchBarButtons[button.id] ? '#0a332c' : '#26353d',
               },

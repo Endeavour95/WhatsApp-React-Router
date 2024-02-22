@@ -5,10 +5,10 @@ import { useState, useEffect } from "react";
 import DefaultRightPannel from "./DefaultRightPannel";
 import { useSelector, useDispatch } from "react-redux";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+// import axios from "axios";
 // import { fetchChats } from "../slices/usersSlice";
-import { setPeoples } from "../slices/usersSlice";
-import { setNewChats } from "../slices/chatsSlice";
+// import { setPeoples } from "../slices/usersSlice";
+// import { setNewChats } from "../slices/chatsSlice";
 
 export default function MainPage() {
     const selectedUser = useSelector((state) => state.peoples.selectedUser)
