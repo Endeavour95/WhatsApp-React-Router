@@ -57,7 +57,7 @@ export const generateMessage = (text) => {
     }
 }
 
-function stateUpdated(text) {
+export function stateUpdated(text) {
     return (dispatch, getState) => {
         const chats = getState().chats.chats
         const lastChat = chats[chats.length - 1]
@@ -76,7 +76,7 @@ function stateUpdated(text) {
     }
 }
 
-function generateReplyMessage(text) {
+export function generateReplyMessage(text) {
     return (dispatch, getState) => {
         const chats = getState().chats.chats
         const selectedUserMobileNo = getState().peoples.selectedUserMobileNo
