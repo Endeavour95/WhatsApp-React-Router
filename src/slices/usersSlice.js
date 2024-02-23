@@ -322,25 +322,28 @@ export const userSlice = createSlice({
                 userUnreadMessages: "2",
             },
         ],
-        selectedUser: {},
-        selectedUserMobileNo : "",
+        selectedUserMobileNo: "",
     },
     reducers: {
         setPeoples: (state, action) => {
             state.peoples = action.payload
         },
         setUnreadMessages: (state, action) => {
-            const userToUpdate = state.peoples.find((user) => user.userMobileNo === action.payload.userMobileNo);
+            const userToUpdate = state.peoples.find((user) => user.userMobileNo === action.payload);
 
             if (userToUpdate) {
                 userToUpdate.userUnreadMessages = "";
             }
         },
-        setSelectedUser: (state, action) => {
-            state.selectedUser = action.payload
-        },
-        selectedUserMobileNo : (state, action) => {
+        setSelectedUserMobileNo: (state, action) => {
             state.selectedUserMobileNo = action.payload
+            console.log("action.payload", action.payload)
+            if (action.payload) {
+                const userToUpdate = state.peoples.find((user) => user.userMobileNo === action.payload);
+                if (userToUpdate) {
+                    userToUpdate.userUnreadMessages = "";
+                }
+            }
         }
     },
     // extraReducers: (builder) => {
@@ -350,6 +353,6 @@ export const userSlice = createSlice({
     // },
 })
 
-export const { setPeoples, setUnreadMessages, setSelectedUser } = userSlice.actions
+export const { setPeoples, setUnreadMessages, setSelectedUserMobileNo } = userSlice.actions
 
 export default userSlice.reducer

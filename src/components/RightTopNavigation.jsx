@@ -4,13 +4,16 @@ import SearchIcon, { BackIcon } from "../Icons/SearchBarIcons";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Menu, MenuItem } from "@mui/material";
-import { setSelectedUser } from "../slices/usersSlice";
+import { setSelectedUserMobileNo } from "../slices/usersSlice";
 import { openWhatsAppDesktop } from "../functions";
 
 export default function RightTopNavigation() {
     const peoples = useSelector((state) => state.peoples.peoples)
 
-    const selectedUser = useSelector((state) => state.peoples.selectedUser)
+    const selectedUser = useSelector((state) => state.peoples.peoples.find((contact) => contact.userMobileNo === state.peoples.selectedUserMobileNo))
+
+    // const selectedUserMobileNo = useSelector((state) => state.peoples.selectedUserMobileNo)
+
 
     const dispatch = useDispatch()
 
@@ -104,7 +107,7 @@ export default function RightTopNavigation() {
                             </Typography>
                         </Stack>
                         <IconButton
-                            onClick={()=>dispatch(openWhatsAppDesktop())}
+                            onClick={() => dispatch(openWhatsAppDesktop())}
                             sx={{
                                 font: 'inherit',
                                 bgcolor: '#00a884',
@@ -139,7 +142,7 @@ export default function RightTopNavigation() {
                     padding: "10px 16px",
                     boxSizing: "border-box",
                     bgcolor: "#202c33",
-                    width:"100%"
+                    width: "100%"
                 }}
             >
                 <Stack
@@ -153,8 +156,8 @@ export default function RightTopNavigation() {
                         sx={{
                             display: { xs: 'block', sm: 'none' },
                         }}
-                        onClick={(e)=>{
-                            dispatch(setSelectedUser({}))
+                        onClick={(e) => {
+                            dispatch(setSelectedUserMobileNo(""))
                         }}
                     />
                     <IconButton
@@ -178,9 +181,9 @@ export default function RightTopNavigation() {
                         justifyContent="center"
                         alignItems="flex-start"
                         paddingLeft={"15px"}
-                        // width={"40%"}
-                        // overflow={"hidden"}
-                        // textOverflow={"ellipsis"}
+                    // width={"40%"}
+                    // overflow={"hidden"}
+                    // textOverflow={"ellipsis"}
                     >
                         <Typography
                             sx={{
@@ -235,7 +238,7 @@ export default function RightTopNavigation() {
                                 borderRadius: "50px",
                                 padding: "5px 10px",
                                 bgcolor: isModalOpen ? "#374248" : "none",
-                                display: {xs : "none", sm : "flex", md :"flex", lg :"flex", xl :"flex"}
+                                display: { xs: "none", sm: "flex", md: "flex", lg: "flex", xl: "flex" }
                             }}
                         >
                             <VideoCallIcon sx={{ marginRight: "6px" }} />

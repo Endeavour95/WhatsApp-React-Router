@@ -4,12 +4,13 @@ import DefaultUserIcon, { DownArrowIcon } from "../Icons/LeftTopNavigationIcons"
 import { useSelector, useDispatch } from "react-redux";
 import { Menu, MenuItem } from "@mui/material";
 import { handleLeftUsersList } from "../functions";
+import { setUnreadMessages } from "../slices/usersSlice";
 
 
 export default function LeftUsersList(props) {
     const peoples = useSelector((state) => state.peoples.peoples)
 
-    const selectedUser = useSelector((state) => state.peoples.selectedUser)
+    const selectedUserMobileNo = useSelector((state) => state.peoples.selectedUserMobileNo)
 
     const chats = useSelector((state) => state.chats.chats)
 
@@ -23,6 +24,8 @@ export default function LeftUsersList(props) {
 
     let peoplesList = getPeoples(peoples, searchText, leftBelowSearchBarButtons)
 
+    const [localUserMobileNo, setlocalUserMobileNo] = useState("")
+
     const menuItems = [
         'Archive chat',
         'Mute notifications',
@@ -35,9 +38,17 @@ export default function LeftUsersList(props) {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
+        if (event.currentTarget.id) {
+            setlocalUserMobileNo(event.currentTarget.id)
+        }
         setAnchorEl(event.currentTarget);
     };
-    const handleClose = () => {
+    const handleClose = (e) => {
+        switch (e.currentTarget.id) {
+            case 'Mark as unread':
+                dispatch(setUnreadMessages(localUserMobileNo))
+                break;
+        }
         setAnchorEl(null);
     };
 
@@ -100,7 +111,7 @@ export default function LeftUsersList(props) {
                                                         if (open) {
                                                             e.stopPropagation()
                                                         } else {
-                                                            dispatch(handleLeftUsersList(user))
+                                                            dispatch(handleLeftUsersList(user.userMobileNo))
                                                         }
                                                     }}
                                                     onMouseEnter={() => setDropdownIconIndex(index)}
@@ -109,7 +120,7 @@ export default function LeftUsersList(props) {
                                                         padding: "0px 15px 0px 0px",
                                                         width: "100%",
                                                         boxSizing: "border-box",
-                                                        bgcolor: selectedUser.userMobileNo === user.userMobileNo ? "#2a3942" : "#111b21",
+                                                        bgcolor: selectedUserMobileNo === user.userMobileNo ? "#2a3942" : "#111b21",
                                                         '&:hover': { bgcolor: "#202c33" },
                                                         justifyContent: "space-between",
                                                         alignItems: "center"
@@ -208,7 +219,8 @@ export default function LeftUsersList(props) {
                                                                 )
                                                             }
                                                             <IconButton
-                                                                id="DownArrowIcon"
+                                                                // id="DownArrowIcon"
+                                                                id={user.userMobileNo}
                                                                 onClick={(e) => {
                                                                     setClientXposition(e.clientX)
                                                                     setClientYposition(e.clientY + 10)
@@ -251,7 +263,10 @@ export default function LeftUsersList(props) {
                                                                 {menuItems.map((item, index) => (
                                                                     <MenuItem
                                                                         key={index}
-                                                                        onClick={handleClose}
+                                                                        id={item}
+                                                                        onClick={(e) => {
+                                                                            handleClose(e)
+                                                                        }}
                                                                         sx={{
                                                                             fontFamily: "inherit",
                                                                             padding: "9px 58px 9px 24px",

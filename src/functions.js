@@ -1,7 +1,7 @@
 import moment from "moment";
 import { setButtonLeftTopNavigation, setLeftBelowSearchBarButtons, setLeftTopNavigationButtons } from "./slices/buttonsSlice";
 import { setChats, setSearchText, updateMessageStatus } from "./slices/chatsSlice";
-import { setSelectedUser, setUnreadMessages } from "./slices/usersSlice";
+import { setUnreadMessages, setSelectedUserMobileNo } from "./slices/usersSlice";
 
 export const openWhatsAppDesktop = () => {
     return (dispatch) => {
@@ -28,10 +28,9 @@ export const handleLeftTopNavigation = (obj) => {
     }
 }
 
-export const handleLeftUsersList = (obj) => {
+export const handleLeftUsersList = (mobileNo) => {
     return (dispatch) => {
-        dispatch(setSelectedUser(obj))
-        dispatch(setUnreadMessages(obj))
+        dispatch(setSelectedUserMobileNo(mobileNo))
     }
 }
 
@@ -44,13 +43,13 @@ export const handlePersonalProfileInfoDrawer = (obj) => {
 export const generateMessage = (text) => {
     return (dispatch, getState) => {
         const chats = getState().chats.chats
-        const selectedUser = getState().peoples.selectedUser
+        const selectedUserMobileNo = getState().peoples.selectedUserMobileNo
         dispatch(setChats({
             "messageId": chats.length < 1 ? 1 : Number(chats[chats.length - 1].messageId) + 1,
             "messageText": text,
             "messageTime": moment().format('HH:mm'),
             "messageDate": moment().format('YYYY-MM-DD'),
-            "userMobileNo": selectedUser.userMobileNo,
+            "userMobileNo": selectedUserMobileNo,
             "deliveredStatus": false,
             "readStatus": false,
         }))
@@ -61,7 +60,6 @@ export const generateMessage = (text) => {
 function stateUpdated(text) {
     return (dispatch, getState) => {
         const chats = getState().chats.chats
-        const selectedUser = getState().peoples.selectedUser
         const lastChat = chats[chats.length - 1]
         console.log("text", text)
         if (Object.hasOwn(lastChat, "deliveredStatus")) {
@@ -81,13 +79,13 @@ function stateUpdated(text) {
 function generateReplyMessage(text) {
     return (dispatch, getState) => {
         const chats = getState().chats.chats
-        const selectedUser = getState().peoples.selectedUser
+        const selectedUserMobileNo = getState().peoples.selectedUserMobileNo
         dispatch(setChats({
             "messageId": chats.length < 1 ? 1 : Number(chats[chats.length - 1].messageId) + 1,
             "messageText": text + " reply Message",
             "messageTime": moment().format('HH:mm'),
             "messageDate": moment().format('YYYY-MM-DD'),
-            "userMobileNo": selectedUser.userMobileNo,
+            "userMobileNo": selectedUserMobileNo,
         }))
     }
 }

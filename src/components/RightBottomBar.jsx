@@ -6,7 +6,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { generateMessage } from "../functions";
 
 export default function RightBottomBar() {
-    const selectedUser = useSelector((state) => state.peoples.selectedUser)
+    const selectedUserMobileNo = useSelector((state) => state.peoples.selectedUserMobileNo)
+
 
     const [textToSend, setTextToSend] = useState("")
 
@@ -19,10 +20,10 @@ export default function RightBottomBar() {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if (selectedUser.userMobileNo) {
+        if (selectedUserMobileNo) {
             inputRef.current.focus()
         }
-    }, [selectedUser])
+    }, [selectedUserMobileNo])
 
     const handleRotateClick = () => {
         const newRotation = rotation.current === 0 ? 135 : 0;
