@@ -2,11 +2,49 @@ import { Divider, Grid, Box, Drawer, Typography, Stack, Paper } from "@mui/mater
 import RightTopNavigation from "./RightTopNavigation";
 import RightBottomBar from "./RightBottomBar";
 import RightMiddleChatSection from "./RightMiddleChatSection";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { handleLeftUsersList } from "../functions";
+import { setSelectedUserMobileNo } from "../slices/usersSlice";
+import { useEffect } from "react";
 
 const open = true
 const onClose = false
 
-export default function Right(props) {
+export default function Right() {
+    const { userMobileNo } = useParams()
+
+    console.log("serrsaf", userMobileNo)
+
+    const dispatch = useDispatch()
+
+    const navigate = useNavigate();
+
+    // useEffect(() => {
+    // Check if selectedUserMobileNo is present in the URL params
+    // if (userMobileNo) {
+    // Dispatch your action to handle left users list
+    dispatch(handleLeftUsersList(userMobileNo));
+    // } else {
+    // If not present, you can navigate to a default route or handle it as needed
+    // navigate(".."); // Change "/default-route" to your desired default route
+    // }
+    // }, [selectedUserMobileNo, dispatch, navigate]);
+
+    // dispatch(handleLeftUsersList(selectedUserMobileNo))
+
+    // function handleRefresh(selectedUserMobileNo) {
+    // dispatch(handleLeftUsersList(selectedUserMobileNo))
+    // }
+
+    // handleRefresh(selectedUserMobileNo)
+
+    // useEffect(() => {
+    //     handleRefresh(selectedUserMobileNo)
+    // }, [])
+
+
+
     return (
         <>
             <Stack

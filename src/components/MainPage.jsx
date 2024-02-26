@@ -9,10 +9,12 @@ import axios from "axios";
 // import { fetchChats } from "../slices/usersSlice";
 import { setPeoples } from "../slices/usersSlice";
 import { setNewChats } from "../slices/chatsSlice";
+import { Outlet } from "react-router-dom";
 
 export default function MainPage() {
     const selectedUserMobileNo = useSelector((state) => state.peoples.selectedUserMobileNo)
 
+    const leftTopNavigationButtons = useSelector((state) => state.buttons.leftTopNavigationButtons)
 
     const dispatch = useDispatch();
 
@@ -62,7 +64,12 @@ export default function MainPage() {
                         width: "100%"
                     }}
                 >
-                    <Left />
+                    {
+                        leftTopNavigationButtons.personalProfileIcon ?
+                            <Outlet />
+                            :
+                            <Left />
+                    }
                 </Grid>
                 <Divider
                     sx={{
@@ -85,7 +92,7 @@ export default function MainPage() {
                 >
                     {
                         selectedUserMobileNo ?
-                            <Right />
+                            <Outlet />
                             :
                             <DefaultRightPannel />
                     }

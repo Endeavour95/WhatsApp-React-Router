@@ -8,7 +8,6 @@ import { generateMessage } from "../functions";
 export default function RightBottomBar() {
     const selectedUserMobileNo = useSelector((state) => state.peoples.selectedUserMobileNo)
 
-
     const [textToSend, setTextToSend] = useState("")
 
     const rotation = useRef(0);

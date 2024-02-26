@@ -1,11 +1,14 @@
 import { Stack, IconButton, Tooltip, Menu, MenuItem, Divider } from "@mui/material";
 import { useState } from "react";
 import DefaultUserIcon, { CommunityOutlineIcon, MenuDotIcon, NewChatOutlineIcon, NewsletterOutlineIcon, StatusUnreadIcon } from "../Icons/LeftTopNavigationIcons";
-import {useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { handleLeftTopNavigation } from "../functions";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function LeftTopNavigation() {
     const dispatch = useDispatch()
+
+    const navigate = useNavigate()
 
     const menuItems = [
         'New group',
@@ -32,7 +35,7 @@ export default function LeftTopNavigation() {
     const handleClose = () => {
         setAnchorEl(null);
     };
-   
+
     return (
         <>
             <Stack
@@ -40,22 +43,25 @@ export default function LeftTopNavigation() {
                 justifyContent="space-between"
                 alignItems="center"
             >
-                {/* <Avatar alt="myProfilePicture" src="https://media-bom2-2.cdn.whatsapp.net/v/t61.24694-24/379727675_1379561979616037_7922129445927542609_n.jpg?ccb=11-4&oh=01_AdRTfAs4DKjvazSPotZLZL2peIym2qNKzmmebs0BZjS_RQ&oe=65D6C6EE&_nc_sid=e6ed6c&_nc_cat=107"/> */}
-                <IconButton
-                    id="personalProfileIcon"
-                    onClick={(e) => {
-                        dispatch(handleLeftTopNavigation({ "buttonName": e.currentTarget.id, "buttonValue": true }))
-                    }}
-                    sx={{
-                        padding: "0px",
-                        "&:hover": { bgcolor: "#374248" }
-                    }}
-                >
-                    <DefaultUserIcon
-                        height={"40"}
-                        width={"40"}
-                    />
-                </IconButton>
+                {/* <Link to={`/pesonalInfo`}> */}
+                    {/* <Avatar alt="myProfilePicture" src="https://media-bom2-2.cdn.whatsapp.net/v/t61.24694-24/379727675_1379561979616037_7922129445927542609_n.jpg?ccb=11-4&oh=01_AdRTfAs4DKjvazSPotZLZL2peIym2qNKzmmebs0BZjS_RQ&oe=65D6C6EE&_nc_sid=e6ed6c&_nc_cat=107"/> */}
+                    <IconButton
+                        id="personalProfileIcon"
+                        onClick={(e) => {
+                            // dispatch(handleLeftTopNavigation({ "buttonName": e.currentTarget.id, "buttonValue": true }))
+                            navigate('personalInfo')
+                        }}
+                        sx={{
+                            padding: "0px",
+                            "&:hover": { bgcolor: "#374248" }
+                        }}
+                    >
+                        <DefaultUserIcon
+                            height={"40"}
+                            width={"40"}
+                        />
+                    </IconButton>
+                {/* </Link> */}
                 <Stack
                     direction="row"
                     justifyContent="flex-end"

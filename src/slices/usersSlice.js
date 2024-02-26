@@ -339,6 +339,7 @@ export const userSlice = createSlice({
             }
         },
         setSelectedUserMobileNo: (state, action) => {
+            console.log("setSelectedUserMobileNo", action.payload)
             state.selectedUserMobileNo = action.payload
             if (action.payload) {
                 const userToUpdate = state.peoples.find((user) => user.userMobileNo === action.payload);

@@ -30,6 +30,8 @@ export const handleLeftTopNavigation = (obj) => {
 
 export const handleLeftUsersList = (mobileNo) => {
     return (dispatch) => {
+        // console.log("selectedUserMobileNo", mobileNo)
+
         dispatch(setSelectedUserMobileNo(mobileNo))
     }
 }

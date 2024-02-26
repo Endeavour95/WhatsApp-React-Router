@@ -6,9 +6,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { Menu, MenuItem } from "@mui/material";
 import { setSelectedUserMobileNo } from "../slices/usersSlice";
 import { openWhatsAppDesktop } from "../functions";
+import { useParams } from "react-router-dom";
 
 export default function RightTopNavigation() {
     const peoples = useSelector((state) => state.peoples.peoples)
+
+    // const {selectedUserMobileNo} = useParams()
+
+    // const selectedUser = useSelector((state) => state.peoples.peoples.find((contact) => contact.userMobileNo === selectedUserMobileNo))
 
     const selectedUser = useSelector((state) => state.peoples.peoples.find((contact) => contact.userMobileNo === state.peoples.selectedUserMobileNo))
 

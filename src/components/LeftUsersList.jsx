@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Menu, MenuItem } from "@mui/material";
 import { handleLeftUsersList } from "../functions";
 import { setUnreadMessages } from "../slices/usersSlice";
+import { Link, useNavigate } from "react-router-dom";
 
 
 export default function LeftUsersList(props) {
@@ -19,6 +20,8 @@ export default function LeftUsersList(props) {
     const leftBelowSearchBarButtons = useSelector((state) => state.buttons.leftBelowSearchBarButtons)
 
     const dispatch = useDispatch()
+
+    const navigate = useNavigate()
 
     const [dropdownIconIndex, setDropdownIconIndex] = useState(null);
 
@@ -111,7 +114,8 @@ export default function LeftUsersList(props) {
                                                         if (open) {
                                                             e.stopPropagation()
                                                         } else {
-                                                            dispatch(handleLeftUsersList(user.userMobileNo))
+                                                            // dispatch(handleLeftUsersList(user.userMobileNo))
+                                                            navigate(`contacts/${user.userMobileNo}`)
                                                         }
                                                     }}
                                                     onMouseEnter={() => setDropdownIconIndex(index)}
