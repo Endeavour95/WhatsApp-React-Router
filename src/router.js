@@ -4,7 +4,6 @@ import DefaultRightPannel from "./components/DefaultRightPannel";
 import Right from "./components/Right";
 import App from "./App";
 import PersonalProfileInfoDrawer from "./components/PersonalProfileInfoDrawer";
-import Left, { LeftPannel } from "./components/Left";
 
 export const router = createBrowserRouter([
     {
@@ -16,13 +15,9 @@ export const router = createBrowserRouter([
                 element: <PersonalProfileInfoDrawer />
             },
             {
-                path: "contacts/:userMobileNo",
+                path: ":userMobileNo",
                 element: <Right />,
             },
-            // {
-            //     path: "*",
-            //     element: <DefaultRightPannel />
-            // }
         ]
     }
 ])

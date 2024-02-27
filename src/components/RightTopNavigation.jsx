@@ -1,24 +1,23 @@
 import { Stack, Avatar, Typography, IconButton, Dialog, DialogContent, Tooltip } from "@mui/material";
 import DefaultUserIcon, { MenuDotIcon, VideoCallIcon, DownArrowIcon } from "../Icons/LeftTopNavigationIcons";
 import SearchIcon, { BackIcon } from "../Icons/SearchBarIcons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Menu, MenuItem } from "@mui/material";
-import { setSelectedUserMobileNo } from "../slices/usersSlice";
 import { openWhatsAppDesktop } from "../functions";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { setLeftTopNavigationButtons } from '../slices/buttonsSlice'
 
 export default function RightTopNavigation() {
-    const peoples = useSelector((state) => state.peoples.peoples)
+    // const peoples = useSelector((state) => state.peoples.peoples)
 
-    // const {selectedUserMobileNo} = useParams()
+    const { userMobileNo } = useParams()
 
-    // const selectedUser = useSelector((state) => state.peoples.peoples.find((contact) => contact.userMobileNo === selectedUserMobileNo))
+    const navigate = useNavigate()
 
-    const selectedUser = useSelector((state) => state.peoples.peoples.find((contact) => contact.userMobileNo === state.peoples.selectedUserMobileNo))
+    // let selectedUser = peoples.find((contact) => contact.userMobileNo === userMobileNo)
 
-    // const selectedUserMobileNo = useSelector((state) => state.peoples.selectedUserMobileNo)
-
+    let selectedUser = useSelector((state) => state.peoples.peoples.find((contact) => contact.userMobileNo === userMobileNo))
 
     const dispatch = useDispatch()
 
@@ -58,7 +57,6 @@ export default function RightTopNavigation() {
             <Dialog
                 open={isOpen}
                 onClose={(event, reason) => {
-                    // onClose()
                     if (reason === 'backdropClick') {
                         onClose();
                     }
@@ -137,180 +135,186 @@ export default function RightTopNavigation() {
     return (
         <>
             <VideoCallModal isOpen={isModalOpen} onClose={handleCloseModal} />
-            <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-                whiteSpace={"nowrap"}
-                // overflow={"hidden"}
-                sx={{
-                    padding: "10px 16px",
-                    boxSizing: "border-box",
-                    bgcolor: "#202c33",
-                    width: "100%"
-                }}
-            >
-                <Stack
-                    direction="row"
-                    justifyContent="flex-start"
-                    alignItems="center"
-                >
-                    <BackIcon
-                        id="backIcon"
-                        colour="#d9dee0"
-                        sx={{
-                            display: { xs: 'block', sm: 'none' },
-                        }}
-                        onClick={(e) => {
-                            dispatch(setSelectedUserMobileNo(""))
-                        }}
-                    />
-                    <IconButton
-                        id="personalProfileIcon"
-                        onClick={(e) => { }}
-                        sx={{
-                            padding: "0px",
-                            '&:hover': { cursor: "pointer" }
-                        }}
-                    >
-                        {
-                            selectedUser.profilePicture ? (
-                                <Avatar sx={{ height: "40px", width: "40px" }} alt={selectedUser.userName} src={selectedUser.profilePicture} />
-                            ) : (
-                                <DefaultUserIcon height={40} width={40} />
-                            )
-                        }
-                    </IconButton>
+            {
+                selectedUser ? (
                     <Stack
-                        direction={"column"}
-                        justifyContent="center"
-                        alignItems="flex-start"
-                        paddingLeft={"15px"}
-                    // width={"40%"}
-                    // overflow={"hidden"}
-                    // textOverflow={"ellipsis"}
-                    >
-                        <Typography
-                            sx={{
-                                color: "#ede9ef",
-                                font: "inherit",
-                                fontSize: "16px",
-                                fontWeight: "600",
-                                '&:hover': { cursor: "pointer" }
-                            }}
-                        >
-                            {selectedUser.userName}
-                        </Typography>
-
-                        {
-                            selectedUser.userLastSeen ?
-                                <Typography
-                                    sx={{
-                                        color: '#8696A0',
-                                        font: 'inherit',
-                                        fontSize: '13px',
-                                    }}
-                                >
-                                    last seen today at {selectedUser.userLastSeen}
-                                </Typography> :
-                                <Typography
-                                    sx={{
-                                        color: '#8696A0',
-                                        font: 'inherit',
-                                        fontSize: '13px',
-                                    }}
-                                >
-                                    Click here for contact info
-                                </Typography>
-                        }
-                    </Stack>
-                </Stack>
-                <Stack
-                    id="icons"
-                    direction="row"
-                    justifyContent="flex-start"
-                    alignItems="center"
-                    spacing={1}
-                >
-                    <Tooltip title="Get the app for calling">
-                        <IconButton
-                            onClick={() => {
-                                handleOpenModal()
-                            }}
-                            sx={{
-                                color: "#4c5c66",
-                                border: "1px solid #2f3b43",
-                                borderRadius: "50px",
-                                padding: "5px 10px",
-                                bgcolor: isModalOpen ? "#374248" : "none",
-                                display: { xs: "none", sm: "flex", md: "flex", lg: "flex", xl: "flex" }
-                            }}
-                        >
-                            <VideoCallIcon sx={{ marginRight: "6px" }} />
-                            <DownArrowIcon height={13} width={13} colour={"#4c5c66"} />
-                        </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Search...">
-                        <IconButton
-                            sx={{
-                                padding: "0px 8px"
-                            }}
-                        >
-                            <SearchIcon colour="#aebac1" height={30} width={30} />
-                        </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Menu">
-                        <IconButton
-                            id="menuDotIcon"
-                            onClick={(e) => {
-                                // dispatch(setLeftTopNavigationButtons({ "buttonName": e.currentTarget.id, "buttonValue": true }))
-                                handleClick(e)
-                            }}
-                            aria-controls={open ? 'account-menu' : undefined}
-                            aria-haspopup="true"
-                            aria-expanded={open ? 'true' : undefined}
-                            sx={{
-                                borderRadius: "50%",
-                                bgcolor: anchorEl ? "#374248" : "none",
-                                "&:hover": { bgcolor: "#202c33" }
-                            }}
-                        >
-                            <MenuDotIcon />
-                        </IconButton>
-                    </Tooltip>
-                    <Menu
-                        anchorEl={anchorEl}
-                        id="account-menu"
-                        open={open}
-                        onClose={handleClose}
-                        onClick={handleClose}
-                        PaperProps={{
-                            elevation: 0,
-                            sx: {
-                                color: "#d1d7db",
-                                bgcolor: "#233138",
-                            },
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        whiteSpace={"nowrap"}
+                        // overflow={"hidden"}
+                        sx={{
+                            padding: "10px 16px",
+                            boxSizing: "border-box",
+                            bgcolor: "#202c33",
+                            width: "100%"
                         }}
-                        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                     >
-                        {menuItems.map((item, index) => (
-                            <MenuItem
-                                key={index}
-                                onClick={handleClose}
+                        <Stack
+                            direction="row"
+                            justifyContent="flex-start"
+                            alignItems="center"
+                        >
+                            <BackIcon
+                                id="backIcon"
+                                colour="#d9dee0"
                                 sx={{
-                                    fontFamily: "inherit",
-                                    padding: "9px 24px 9px 24px",
-                                    fontSize: "14.5px",
-                                    '&:hover': { bgcolor: "#182229" },
+                                    display: { xs: 'block', sm: 'none' },
+                                }}
+                                onClick={(e) => {
+                                    navigate(`/`)
+                                }}
+                            />
+                            <IconButton
+                                id="personalProfileIcon"
+                                onClick={(e) => { }}
+                                sx={{
+                                    padding: "0px",
+                                    '&:hover': { cursor: "pointer" }
                                 }}
                             >
-                                {item}
-                            </MenuItem>
-                        ))}
-                    </Menu>
-                </Stack>
-            </Stack>
+                                {
+                                    selectedUser.profilePicture ? (
+                                        <Avatar sx={{ height: "40px", width: "40px" }} alt={selectedUser.userName} src={selectedUser.profilePicture} />
+                                    ) : (
+                                        <DefaultUserIcon height={40} width={40} />
+                                    )
+                                }
+                            </IconButton>
+                            <Stack
+                                direction={"column"}
+                                justifyContent="center"
+                                alignItems="flex-start"
+                                paddingLeft={"15px"}
+                            // width={"40%"}
+                            // overflow={"hidden"}
+                            // textOverflow={"ellipsis"}
+                            >
+                                <Typography
+                                    sx={{
+                                        color: "#ede9ef",
+                                        font: "inherit",
+                                        fontSize: "16px",
+                                        fontWeight: "600",
+                                        '&:hover': { cursor: "pointer" }
+                                    }}
+                                >
+                                    {selectedUser.userName}
+                                </Typography>
+
+                                {
+                                    selectedUser.userLastSeen ?
+                                        <Typography
+                                            sx={{
+                                                color: '#8696A0',
+                                                font: 'inherit',
+                                                fontSize: '13px',
+                                            }}
+                                        >
+                                            last seen today at {selectedUser.userLastSeen}
+                                        </Typography> :
+                                        <Typography
+                                            sx={{
+                                                color: '#8696A0',
+                                                font: 'inherit',
+                                                fontSize: '13px',
+                                            }}
+                                        >
+                                            Click here for contact info
+                                        </Typography>
+                                }
+                            </Stack>
+                        </Stack>
+                        <Stack
+                            id="icons"
+                            direction="row"
+                            justifyContent="flex-start"
+                            alignItems="center"
+                            spacing={1}
+                        >
+                            <Tooltip title="Get the app for calling">
+                                <IconButton
+                                    onClick={() => {
+                                        handleOpenModal()
+                                    }}
+                                    sx={{
+                                        color: "#4c5c66",
+                                        border: "1px solid #2f3b43",
+                                        borderRadius: "50px",
+                                        padding: "5px 10px",
+                                        bgcolor: isModalOpen ? "#374248" : "none",
+                                        display: { xs: "none", sm: "flex", md: "flex", lg: "flex", xl: "flex" }
+                                    }}
+                                >
+                                    <VideoCallIcon sx={{ marginRight: "6px" }} />
+                                    <DownArrowIcon height={13} width={13} colour={"#4c5c66"} />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Search...">
+                                <IconButton
+                                    sx={{
+                                        padding: "0px 8px"
+                                    }}
+                                >
+                                    <SearchIcon colour="#aebac1" height={30} width={30} />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Menu">
+                                <IconButton
+                                    id="menuDotIcon"
+                                    onClick={(e) => {
+                                        dispatch(setLeftTopNavigationButtons({ "buttonName": e.currentTarget.id, "buttonValue": true }))
+                                        handleClick(e)
+                                    }}
+                                    aria-controls={open ? 'account-menu' : undefined}
+                                    aria-haspopup="true"
+                                    aria-expanded={open ? 'true' : undefined}
+                                    sx={{
+                                        borderRadius: "50%",
+                                        bgcolor: anchorEl ? "#374248" : "none",
+                                        "&:hover": { bgcolor: "#202c33" }
+                                    }}
+                                >
+                                    <MenuDotIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <Menu
+                                anchorEl={anchorEl}
+                                id="account-menu"
+                                open={open}
+                                onClose={handleClose}
+                                onClick={handleClose}
+                                PaperProps={{
+                                    elevation: 0,
+                                    sx: {
+                                        color: "#d1d7db",
+                                        bgcolor: "#233138",
+                                    },
+                                }}
+                                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                            >
+                                {menuItems.map((item, index) => (
+                                    <MenuItem
+                                        key={index}
+                                        onClick={handleClose}
+                                        sx={{
+                                            fontFamily: "inherit",
+                                            padding: "9px 24px 9px 24px",
+                                            fontSize: "14.5px",
+                                            '&:hover': { bgcolor: "#182229" },
+                                        }}
+                                    >
+                                        {item}
+                                    </MenuItem>
+                                ))}
+                            </Menu>
+                        </Stack>
+                    </Stack>
+                ) : (
+                    <></>
+                )
+            }
         </>
     )
 }

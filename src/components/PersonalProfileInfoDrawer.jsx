@@ -2,17 +2,12 @@ import { Typography, Grid, Stack, IconButton, Avatar } from "@mui/material";
 import { BackIcon } from "../Icons/SearchBarIcons";
 import DefaultUserIcon, { CameraIcon, PencilIcon } from "../Icons/LeftTopNavigationIcons";
 import { useSelector, useDispatch } from "react-redux";
-import { handleLeftTopNavigation, handlePersonalProfileInfoDrawer } from "../functions";
 import { useNavigate } from "react-router-dom";
 
 export default function PersonalProfileInfoDrawer() {
     const personalInfo = useSelector((state) => state.peoples.personalInfo)
 
     const navigate = useNavigate();
-
-    const dispatch = useDispatch()
-
-    dispatch(handleLeftTopNavigation({ "buttonName": "personalProfileIcon", "buttonValue": true }))
 
     return (
         <>
@@ -62,7 +57,6 @@ export default function PersonalProfileInfoDrawer() {
                                     '&:hover': { cursor: "pointer" },
                                 }}
                                 onClick={(e) => {
-                                    // dispatch(handlePersonalProfileInfoDrawer({ "buttonName": e.currentTarget.id, "buttonValue": false }))
                                     navigate('/')
                                 }}
                             >

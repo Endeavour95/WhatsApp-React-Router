@@ -3,13 +3,13 @@ import { List, ListItem, Stack } from '@mui/material';
 import DoubleTickIcon, { SingleTickIcon } from "../Icons/MessageIcons";
 import { useSelector } from "react-redux";
 import { useRef, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 
 export default function RightMiddleChatSection() {
+    const {userMobileNo} = useParams()
+
     const chats = useSelector((state)=> state.chats.chats)
-
-    const selectedUserMobileNo = useSelector((state) => state.peoples.selectedUserMobileNo)
-
 
     const lastChatRef = useRef(null)
 
@@ -37,7 +37,7 @@ export default function RightMiddleChatSection() {
                 }}
             >
                 <List>
-                    {chats.filter((chat) => selectedUserMobileNo == chat.userMobileNo).map((chat, index , array) => (
+                    {chats.filter((chat) => chat.userMobileNo === userMobileNo).map((chat, index , array) => (
                         <ListItem
                             key={chat.messageId}
                             ref={index === array.length - 1 ? lastChatRef : null}

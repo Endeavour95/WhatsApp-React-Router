@@ -4,9 +4,11 @@ import SmileyIcon, { AttachMenuPlusIcon, SendIcon, VoiceCommandIcon } from "../I
 import DocumentIcon, { PhotoVideoIcon, CameraIconAdvanced, ContactIcon, PollIcon, NewStickerIcon } from "../Icons/AttachmentModalIcons";
 import { useSelector, useDispatch } from "react-redux";
 import { generateMessage } from "../functions";
+import { useParams } from "react-router-dom";
+
 
 export default function RightBottomBar() {
-    const selectedUserMobileNo = useSelector((state) => state.peoples.selectedUserMobileNo)
+    const {userMobileNo} = useParams()
 
     const [textToSend, setTextToSend] = useState("")
 
@@ -19,10 +21,10 @@ export default function RightBottomBar() {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if (selectedUserMobileNo) {
+        if (userMobileNo) {
             inputRef.current.focus()
         }
-    }, [selectedUserMobileNo])
+    }, [userMobileNo])
 
     const handleRotateClick = () => {
         const newRotation = rotation.current === 0 ? 135 : 0;
@@ -88,7 +90,7 @@ export default function RightBottomBar() {
                         onKeyUp={(e) => {
                             if (e.key === "Enter") {
                                 if (textToSend) {
-                                    dispatch(generateMessage(textToSend))
+                                    dispatch(generateMessage(textToSend, userMobileNo))
                                     setTextToSend("")
                                 }
                             }
@@ -117,7 +119,7 @@ export default function RightBottomBar() {
                     textToSend ?
                         <SendIcon
                             onClick={() => {
-                                dispatch(generateMessage(textToSend))
+                                dispatch(generateMessage(textToSend, userMobileNo))
                                 setTextToSend("")
                             }}
                             sx={{

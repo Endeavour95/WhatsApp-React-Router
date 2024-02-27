@@ -3,15 +3,14 @@ import { useState } from "react";
 import DefaultUserIcon, { DownArrowIcon } from "../Icons/LeftTopNavigationIcons";
 import { useSelector, useDispatch } from "react-redux";
 import { Menu, MenuItem } from "@mui/material";
-import { handleLeftUsersList } from "../functions";
 import { setUnreadMessages } from "../slices/usersSlice";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 
 export default function LeftUsersList(props) {
     const peoples = useSelector((state) => state.peoples.peoples)
 
-    const selectedUserMobileNo = useSelector((state) => state.peoples.selectedUserMobileNo)
+    const {userMobileNo} = useParams()
 
     const chats = useSelector((state) => state.chats.chats)
 
@@ -114,8 +113,7 @@ export default function LeftUsersList(props) {
                                                         if (open) {
                                                             e.stopPropagation()
                                                         } else {
-                                                            // dispatch(handleLeftUsersList(user.userMobileNo))
-                                                            navigate(`contacts/${user.userMobileNo}`)
+                                                            navigate(`${user.userMobileNo}`)
                                                         }
                                                     }}
                                                     onMouseEnter={() => setDropdownIconIndex(index)}
@@ -124,7 +122,7 @@ export default function LeftUsersList(props) {
                                                         padding: "0px 15px 0px 0px",
                                                         width: "100%",
                                                         boxSizing: "border-box",
-                                                        bgcolor: selectedUserMobileNo === user.userMobileNo ? "#2a3942" : "#111b21",
+                                                        bgcolor: userMobileNo === user.userMobileNo ? "#2a3942" : "#111b21",
                                                         '&:hover': { bgcolor: "#202c33" },
                                                         justifyContent: "space-between",
                                                         alignItems: "center"
