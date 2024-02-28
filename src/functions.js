@@ -36,7 +36,6 @@ export const handlePersonalProfileInfoDrawer = (obj) => {
 
 export const generateMessage = (text, userMobileNo) => {
     return (dispatch, getState) => {
-        console.log("generateMessage", userMobileNo)
         const chats = getState().chats.chats
         dispatch(setChats({
             "messageId": chats.length < 1 ? 1 : Number(chats[chats.length - 1].messageId) + 1,
@@ -55,7 +54,6 @@ export function stateUpdated(text, userMobileNo) {
     return (dispatch, getState) => {
         const chats = getState().chats.chats
         const lastChat = chats[chats.length - 1]
-        console.log("text", text)
         if (Object.hasOwn(lastChat, "deliveredStatus")) {
             setTimeout(() => {
                 dispatch(updateMessageStatus({ messageId: lastChat.messageId, status: "deliveredStatus", value: true }))

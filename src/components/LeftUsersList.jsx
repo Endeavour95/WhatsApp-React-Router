@@ -7,7 +7,7 @@ import { setUnreadMessages } from "../slices/usersSlice";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 
-export default function LeftUsersList(props) {
+export default function LeftUsersList() {
     const peoples = useSelector((state) => state.peoples.peoples)
 
     const {userMobileNo} = useParams()

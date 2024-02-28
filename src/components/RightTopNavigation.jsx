@@ -7,6 +7,7 @@ import { Menu, MenuItem } from "@mui/material";
 import { openWhatsAppDesktop } from "../functions";
 import { useNavigate, useParams } from "react-router-dom";
 import { setLeftTopNavigationButtons } from '../slices/buttonsSlice'
+import { useBreakpoint } from "../hooks/responsive";
 
 export default function RightTopNavigation() {
     // const peoples = useSelector((state) => state.peoples.peoples)
@@ -20,6 +21,8 @@ export default function RightTopNavigation() {
     let selectedUser = useSelector((state) => state.peoples.peoples.find((contact) => contact.userMobileNo === userMobileNo))
 
     const dispatch = useDispatch()
+
+    const isMobile = useBreakpoint()
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -155,16 +158,13 @@ export default function RightTopNavigation() {
                             justifyContent="flex-start"
                             alignItems="center"
                         >
-                            <BackIcon
+                            {isMobile && <BackIcon
                                 id="backIcon"
                                 colour="#d9dee0"
-                                sx={{
-                                    display: { xs: 'block', sm: 'none' },
-                                }}
                                 onClick={(e) => {
                                     navigate(`/`)
                                 }}
-                            />
+                            />}
                             <IconButton
                                 id="personalProfileIcon"
                                 onClick={(e) => { }}
@@ -233,7 +233,7 @@ export default function RightTopNavigation() {
                             spacing={1}
                         >
                             <Tooltip title="Get the app for calling">
-                                <IconButton
+                                {!isMobile && <IconButton
                                     onClick={() => {
                                         handleOpenModal()
                                     }}
@@ -243,12 +243,13 @@ export default function RightTopNavigation() {
                                         borderRadius: "50px",
                                         padding: "5px 10px",
                                         bgcolor: isModalOpen ? "#374248" : "none",
-                                        display: { xs: "none", sm: "flex", md: "flex", lg: "flex", xl: "flex" }
+                                        display: "flex",
                                     }}
                                 >
                                     <VideoCallIcon sx={{ marginRight: "6px" }} />
                                     <DownArrowIcon height={13} width={13} colour={"#4c5c66"} />
-                                </IconButton>
+                                </IconButton>}
+
                             </Tooltip>
                             <Tooltip title="Search...">
                                 <IconButton
